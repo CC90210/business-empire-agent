@@ -1,0 +1,23 @@
+# Environment and secrets
+.env
+.env.*
+*.env
+
+# MCP config files containing tokens
+references/Claude_Global_MCP.json
+references/Claude_Global_Settings.json
+
+# Node modules (if any get created by npx)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Anti-Gravity IDE
+.antigravityignore
+
+# Temporary files
+*.tmp
+*.bak
