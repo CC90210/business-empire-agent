@@ -1,15 +1,33 @@
 # DECISIONS LOG
 > Architectural and technical decisions with rationale. Use ISO 8601 dates.
 
-## Template
-```
-### YYYY-MM-DD — [DECISION TITLE]
-**Context:** [why this decision was needed]
-**Options:** [what was considered — list 2-3 with pros/cons]
-**Decision:** [what was chosen and why]
-**Consequences:** [what this means going forward]
-```
-
 ---
 
-*No entries yet.*
+### 2026-02-27 — Multi-Agent Architecture (3-Tier)
+**Context:** CC uses multiple AI interfaces (Claude Code, Anti-Gravity/Gemini, Blackbox AI). Needed a unified system where all agents share the same brain.
+**Options:**
+1. Separate instruction sets per agent — causes drift and inconsistency
+2. Single shared brain (AGENT_CORE_DIRECTIVES.md) with per-agent entry points — consistent, scalable
+3. Centralized API orchestrator — over-engineered for current needs
+**Decision:** Option 2. Three entry points (CLAUDE.md, ANTIGRAVITY.md, BLACKBOX.md) all pointing to AGENT_CORE_DIRECTIVES.md as the single source of truth.
+**Consequences:** All agents share memory, tasks, patterns. Any agent can pick up where another left off.
+
+### 2026-02-27 — Playwright as Sole Web Research Tool
+**Context:** Previously had Brave Search + Fetch + Playwright. Brave Search was deprecated, Fetch was redundant.
+**Options:**
+1. Keep all three — wastes MCP slots, confusing routing
+2. Playwright only — handles all web research
+3. Replace with WebSearch native tool — limited vs full browser automation
+**Decision:** Option 2. Playwright handles all web research. Removed Brave Search and Fetch references.
+**Consequences:** Simpler MCP routing. One tool for all web research.
+
+### 2026-02-27 — .env.agents as Centralized Secret Store
+**Context:** Multiple agents need API keys. Keys were scattered across MCP configs.
+**Options:**
+1. Per-MCP config files with inline keys — scattered, hard to rotate
+2. Single .env.agents file — centralized, gitignored, one place
+3. OS-level environment variables — hard to manage across interfaces
+**Decision:** Option 2. `.env.agents` in project root, protected by `.gitignore`.
+**Consequences:** All agents know where to find keys. Key rotation is one file edit.
+
+---

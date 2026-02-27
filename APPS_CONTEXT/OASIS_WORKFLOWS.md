@@ -5,7 +5,17 @@
 
 | ID | Name | Project | Trigger | Purpose | Status | Last Updated |
 |----|------|---------|---------|---------|--------|-------------|
-| — | — | — | — | No workflows registered yet | — | — |
+| 1cGIN32alM8sf8OV | OASIS Email Automation | OASIS AI | Webhook/Scheduled | Captures and processes emails | Active | 2026-02-27 |
+| 4t5VjmsByTfRCeu0 | OasisAI Website bot | OASIS AI | Webhook | Handles website chat interactions | Active | 2026-02-27 |
+| GfTyojYcq9hnJUHm | Oasis Content Agent Linkeden | Content & Marketing | Scheduled | LinkedIn content generation/posting | Active | 2026-02-27 |
+| NdiNBgHOPOxSP4Y2LeJqf | PropFlow Automations | PropFlow | Webhook | Backend automation for PropFlow | Active | 2026-02-27 |
+| P5sRAFEeO4fQxYll | Invoice Automation | Internal Operations | Webhook | Generates and sends invoices via Stripe | Active | 2026-02-27 |
+| YfozmGzasm2CUJgD | Shopify Automation | OASIS Products | Webhook | Fulfillment and inventory management | Active | 2026-02-27 |
+| ZxjYvh351CXcSbel | Oasis Content Agent X | Content & Marketing | Scheduled | X (Twitter) content generation/posting | Active | 2026-02-27 |
+| c5QBEQTNpbNU6UmB | Personal Booking Agent | Internal Operations | Webhook | Manages CC's appointments/bookings | Active | 2026-02-27 |
+| iRkiltEX9JMsg2BQ | Oasis Voice Agent | OASIS AI | Webhook | Twilio + ElevenLabs voice automation | Active | 2026-02-27 |
+| wfAZrrZ6j744QPcr-dGXk | GrapeVine Cottage Automations | Client Automation | Webhook | Automation for GrapeVine Cottage client | Active | 2026-02-27 |
+
 
 ## Workflow Categories
 

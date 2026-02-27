@@ -1,22 +1,30 @@
 # ACTIVE TASKS
-> Read this FIRST at the start of every session.
+> Read this FIRST at the start of every session. Priority is marked with [P0] Critical, [P1] High, [P2] Medium.
+
+## Completed
+- [x] [P1] Install Late API MCP — connected, Pydantic patch applied
+- [x] [P1] Bravo V4 overhaul — all agents, commands, skills verified
+- [x] [P1] First LinkedIn + X post via Late API (2026-02-27)
+- [x] [P0] Multi-agent architecture — Claude Code + Anti-Gravity + Blackbox entry points
+- [x] [P1] Security protocol skill + .env.agents setup
 
 ## In Progress
-- [x] Install Brave Search MCP (get free key: https://brave.com/search/api/)
-- [x] Install Late API MCP (get key: https://getlate.dev/dashboard/api-keys)
-- [x] Connect social accounts to Late API dashboard (https://getlate.dev/dashboard)
+- [ ] [P0] Fix Supabase MCP auth — token exists in .env.agents, needs injection into MCP runtime env
+- [ ] [P1] Fix Late MCP Pydantic errors — profileId dict vs str (uv cache patched, may need reapply)
+- [ ] [P1] Configure n8n MCP trigger nodes — 0 workflows exposed to MCP currently
 
 ## Up Next
-- [ ] Install Remotion Agent Skills: `npx skills add remotion-dev/skills`
-- [ ] Clone Video Toolkit: `git clone https://github.com/digitalsamba/claude-code-video-toolkit.git`
-- [ ] First content creation session — generate 5 content ideas for the week
-- [ ] Set up Whisper for local caption generation
-- [ ] Configure ElevenLabs for voiceover
-- [ ] Build competitive analysis workflow
+- [ ] [P0] First content creation session — generate 5 content ideas for the week
+- [ ] [P1] Build competitive analysis workflow (Playwright-based)
+- [ ] [P2] Install Remotion Agent Skills for video production
+- [ ] [P2] Set up Whisper for local caption generation
+- [ ] [P2] Configure ElevenLabs for voiceover
+- [ ] [P2] Enable GitHub MCP in Anti-Gravity IDE for remote git ops
 
 ## Blocked / Waiting
 | Task | Blocked By | Since |
 |------|-----------|-------|
-| Supabase MCP | Plan upgrade needed | 2026-02-26 |
+| Supabase MCP queries | Token not injected into MCP runtime | 2026-02-27 |
+| n8n workflow automation | No MCP trigger nodes configured in n8n | 2026-02-27 |
 
 *Last updated: 2026-02-27*

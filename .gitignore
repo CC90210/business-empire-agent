@@ -21,3 +21,37 @@ desktop.ini
 # Temporary files
 *.tmp
 *.bak
+
+# Debug artifacts (prevent agent junk from being committed)
+*.log
+*.txt
+!README.txt
+
+# JSON debug dumps at root (keep .json configs in subdirs)
+mcp_out.json
+late_tools.json
+late_accounts.json
+n8n_workflows.json
+*_res.json
+*_err.json
+*_raw*.json
+*_debug*.json
+
+# Standalone scripts at root (agent junk prevention)
+*.js
+!skills/**/*.js
+
+# Agent-generated workaround files
+*_post*.js
+*_test*.js
+direct_*.js
+count_*.js
+
+# Python
+__pycache__/
+*.pyc
+
+# Build artifacts
+dist/
+build/
+*.local
