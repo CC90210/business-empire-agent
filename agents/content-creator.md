@@ -8,8 +8,7 @@ tools:
   - Glob
   - Grep
   - Bash
-  - mcp__brave-search
-  - mcp__fetch
+  - mcp__playwright
 ---
 You are Bravo's content creation specialist for CC.
 

@@ -26,6 +26,20 @@ You're chatting with an AI agent that can actually DO things. Not just answer qu
 
 ---
 
+## BRAVO CORE COMMANDS (New in v3)
+
+You can trigger entire pipelines by mentioning these keywords. Bravo will automatically route the task to the correct specialized sub-agent (like `content-creator`, `researcher`, or `social-publisher`).
+
+| Trigger Phrase | What It Does | Example |
+|---------|-------------|---------|
+| **"Research [topic]"** | Uses Playwright to browse the web, read articles, and synthesize a 5-point actionable brief with content angles. | *"Research what's trending right now regarding AI automation for real estate agencies."* |
+| **"Content: [idea]"** | Generates a platform-optimized script/post using CC's exact voice, 5 content pillars, and no hustle-culture BS. | *"Content: Write a short-form reel script about working the weekend shift at Nicky's Donuts while trying to hit $10k MRR."* |
+| **"Post: [message]"** | Uses the **Late** API MCP to format, schedule, and publish your content across all connected platforms (TikTok, X, LinkedIn, etc). | *"Post: Schedule that Nicky's Donuts script as a text post for X/Twitter tomorrow at 9am."* |
+| **"Edit Video: [instructions]"** | Uses FFmpeg and Remotion to trim raw footage, add motion graphics, and format for the target platform (9:16 or 16:9). | *"Edit Video: Take input.mp4, trim the first 10 seconds, format it vertical, and add captions."* |
+| **"Review [file/code]"** | Acts as a senior QA/security auditor. Hunts for hardcoded secrets, TypeScript errors, and bottleneck issues. | *"Review the payment webhook handler in PropFlow."* |
+
+---
+
 ## HOW TO TALK TO IT (Natural Language)
 
 You don't need special syntax. Just be direct. Here's what works:
@@ -120,7 +134,9 @@ You don't need special syntax. Just be direct. Here's what works:
 | **GitHub** | Push, pull, create branches, PRs, manage repos |
 | **Supabase** | Query databases, create tables, run migrations |
 | **n8n** | Trigger workflows, read workflow configs, manage automations |
-| **Web Fetch** | Pull docs, APIs, research from the web |
-| **Memory** | Remember things across sessions |
+| **Web/Browser** | Playwright for complete browser automation (JS-heavy sites, screenshots, web searches) |
+| **Memory** | Remember things across sessions (ACTIVE_TASKS, CONTEXT, etc.) |
 | **Context7** | Look up current documentation for any library |
 | **Sequential Thinking** | Break complex problems into logical steps |
+| **Late API (Social)** | Publish and schedule posts on 13+ social platforms |
+| **Stripe** | View subscriptions, create products, and manage the Stripe accounts across all 3 portals |

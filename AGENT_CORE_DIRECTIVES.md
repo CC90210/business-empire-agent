@@ -367,6 +367,7 @@ Use these proactively — do not wait to be asked:
 | **Playwright** | Full browser automation — JS-rendered sites, form filling, screenshots |
 | **Brave Search** | Web search for content research, trends, competitor analysis (2,000 free queries/mo) |
 | **Late** | Social media posting across 13+ platforms — publish, schedule, analytics |
+| **Stripe** | Stripe account operations across PropFlow, Nostalgic Requests, and OASIS AI |
 
 ### MCP Decision Tree
 
@@ -411,6 +412,7 @@ Scope: Use `--scope user` for tools that should work across all projects.
 | Filesystem | Stdio | None | File access to Projects/ | ✅ |
 | Brave Search | Stdio | API key env var | Web search, trend research, competitor analysis | ✅ |
 | Late | Stdio | API key env var | Social media posting (13+ platforms) | ✅ |
+| Stripe | Stdio | API key arg | Manage Stripe across Nostalgic, PropFlow, OASIS AI | ✅ |
 | Supabase | Stdio | OAuth | Database, auth, RLS, types | ⏳ Pending |
 
 

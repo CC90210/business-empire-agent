@@ -1,9 +1,8 @@
 Research request: $ARGUMENTS
 
-1. Brave Search for initial discovery (3-5 targeted queries)
-2. Fetch MCP for full article reads
-3. Playwright for JS-heavy sites or screenshot needs
-4. Synthesize into actionable brief:
+1. Use Playwright to search for initial discovery via Google (3-5 targeted queries)
+2. Use Playwright to read full articles
+3. Synthesize into actionable brief:
    - Key findings (3-5 points)
    - CC's opportunity (gaps to fill)
    - Content angles (3-5 specific post ideas)

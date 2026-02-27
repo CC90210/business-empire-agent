@@ -2,9 +2,9 @@
 > Read this FIRST at the start of every session.
 
 ## In Progress
-- [ ] Install Brave Search MCP (get free key: https://brave.com/search/api/)
-- [ ] Install Late API MCP (get key: https://getlate.dev/dashboard/api-keys)
-- [ ] Connect social accounts to Late API dashboard (https://getlate.dev/dashboard)
+- [x] Install Brave Search MCP (get free key: https://brave.com/search/api/)
+- [x] Install Late API MCP (get key: https://getlate.dev/dashboard/api-keys)
+- [x] Connect social accounts to Late API dashboard (https://getlate.dev/dashboard)
 
 ## Up Next
 - [ ] Install Remotion Agent Skills: `npx skills add remotion-dev/skills`
