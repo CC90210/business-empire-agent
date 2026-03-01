@@ -100,6 +100,9 @@
 
 | Service | Access Method | Purpose |
 |---------|---------------|---------|
+| n8n | n8n-mcp / API | Workflow automation (Full CRUD via Bravo) |
+| Gmail | API / SMTP | Email drafting, research, and approval-based sending |
+| Notion | API | Task tracking, project management, and knowledge base |
 | ElevenLabs | Chrome/API | Voice & audio generation |
 | Vercel | Git push auto-deploy | Hosting & previews |
 | GoHighLevel | n8n webhooks | CRM for OASIS clients |

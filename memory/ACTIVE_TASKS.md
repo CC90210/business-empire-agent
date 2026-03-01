@@ -13,10 +13,10 @@
 - [x] [P0] Updated AGENT_CORE_DIRECTIVES.md to V5.0 (11 sections, brain-first)
 - [x] [P0] Supabase migration applied (001_bravo_agent_schema.sql) — CC confirmed tables created 2026-02-28
 - [x] [P0] Gemini CLI integration (v0.31.0) — configured as fallback/diagnostic tool 2026-02-28
+- [x] [P1] Fix Late MCP Pydantic errors — profileId dict vs str (All uv cache models patched 2026-02-28)
 
 ## In Progress
 
-- [x] [P1] Fix Late MCP Pydantic errors — profileId dict vs str (All uv cache models patched 2026-02-28)
 - [ ] [P1] Configure n8n MCP trigger nodes — 0 workflows exposed to MCP currently
 
 ## Up Next

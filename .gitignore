@@ -57,3 +57,5 @@ __pycache__/
 dist/
 build/
 *.local
+
+blobs/
