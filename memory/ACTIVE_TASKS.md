@@ -3,32 +3,25 @@
 
 ## Completed
 
-- [x] [P1] Install Late API MCP — connected, Pydantic patch applied
-- [x] [P1] Bravo V4 overhaul — all agents, commands, skills verified
-- [x] [P1] First LinkedIn + X post via Late API (2026-02-27)
-- [x] [P0] Multi-agent architecture — Claude Code + Anti-Gravity + Blackbox entry points
-- [x] [P1] Security protocol skill + .env.agents setup
-- [x] [P0] V5.0 OpenClaw-Enhanced Architecture — brain/, 6 new skills, 3 new memory files, Supabase schema
-- [x] [P0] Updated all entry points (CLAUDE.md, ANTIGRAVITY.md, BLACKBOX.md) with brain-first boot
-- [x] [P0] Updated AGENT_CORE_DIRECTIVES.md to V5.0 (11 sections, brain-first)
-- [x] [P0] Supabase migration applied (001_bravo_agent_schema.sql) — CC confirmed tables created 2026-02-28
-- [x] [P0] Gemini CLI integration (v0.31.0) — configured as fallback/diagnostic tool 2026-02-28
-- [x] [P1] Fix Late MCP Pydantic errors — profileId dict vs str (All uv cache models patched 2026-02-28)
+- [x] [P0] V5.0-V5.4 Brain Architecture — SOUL, STATE, Multi-Project Supabase Sync, n8n/Gmail/Notion Integration
+- [x] [P0] Autonomous Telegram Bridge — telegram_agent.js optimized with V5.4 Proactive Wrapper
+- [x] [P1] Supabase Brain Seed — Memories and User Context successfully uploaded to BRAVO project (2026-03-01)
+- [x] [P1] Fix Late MCP Pydantic errors — All uv cache models patched (2026-02-28)
+- [x] [P1] Gmail & Notion Credentials — Securely linked in .env.agents (2026-03-01)
+- [x] [P1] GitHub Sync — Resolved 3GB blob blocking issue and updated .gitignore (2026-03-01)
 
 ## In Progress
 
-- [ ] [P1] Configure n8n MCP trigger nodes — 0 workflows exposed to MCP currently
+- [ ] [P1] Configure n8n MCP trigger nodes — Waiting for CC to add trigger nodes in UI
+- [ ] [P0] First content creation session — Generate 5 content ideas for the week (Proactive trigger ready)
 
 ## Up Next
 
-- [ ] [P0] Test heartbeat protocol — first session with brain-first boot sequence
-- [ ] [P0] First content creation session — generate 5 content ideas for the week
+- [ ] [P0] Test heartbeat protocol — First session with V5.4 brain-first boot via Telegram
 - [ ] [P1] Build competitive analysis workflow (Playwright-based)
-- [ ] [P1] Seed Supabase with existing memory data (after migration applied)
 - [ ] [P2] Install Remotion Agent Skills for video production
 - [ ] [P2] Set up Whisper for local caption generation
 - [ ] [P2] Configure ElevenLabs for voiceover
-- [ ] [P2] Enable GitHub MCP in Anti-Gravity IDE for remote git ops
 - [ ] [P2] Set up n8n → Telegram → CLI heartbeat for daemon mode
 
 ## Blocked / Waiting
@@ -37,4 +30,4 @@
 |------|-----------|-------|
 | n8n workflow automation | No MCP trigger nodes configured in n8n | 2026-02-27 |
 
-*Last updated: 2026-02-28*
+*Last updated: 2026-03-01*

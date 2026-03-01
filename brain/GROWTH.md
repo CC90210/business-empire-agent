@@ -1,68 +1,26 @@
-# GROWTH — Self-Learning & Evolution Tracker
+# GROWTH — Learning & Capability Evolution
 
-> Bravo grows smarter with every session. This file tracks capability expansion, learning milestones, and evolution over time.
+> Tracks the agent's journey from a script to a business empire.
+
+## Capability Timeline
+
+| Date | Tier | Capability | Evidence |
+|------|------|------------|----------|
+| 2026-02-27 | 1 | Basic Autonomy | V4 diagnostic and command set complete |
+| 2026-02-28 | 2 | Brain-First Reasoning | 10-step Brain Loop implemented |
+| 2026-02-28 | 2 | Supabase Persistence | 10-table schema live and queryable |
+| 2026-03-01 | 3 | Multi-Project Sync | Autonomous switching between Bravo, Oasis, and Nostalgic |
+| 2026-03-01 | 3 | Cloud-Local Bridge | n8n, Gmail, and Notion APIs linked to local CLI |
+| 2026-03-01 | 4 | Proactive Persona | System directive mandates gap-identification and revenue focus |
+
+## Skills Acquired (This Session)
+
+- **Multi-Project DB Routing**: Ability to manage multiple Supabase environments without key collisions.
+- **Notion Schema Mapping**: Knowledge of CC's internal rituals and task structures.
+- **Autonomous Lead Enrichment**: Logic built for Gmail-to-Playwright-to-Notion pipelines.
 
 ## Capability Frontier
 
-*What Bravo can do today that it couldn't before. Updated after significant new capabilities.*
-
-| Date | Capability Acquired | Confidence | Evidence |
-|------|-------------------|------------|----------|
-| 2026-02-27 | Social media posting via Late MCP (8 platforms) | 0.85 | First successful LinkedIn + X posts |
-| 2026-02-27 | Multi-agent architecture (3-tier routing) | 0.90 | Claude Code + Anti-Gravity + Blackbox operational |
-| 2026-02-27 | Pydantic error diagnosis & uv cache patching | 0.80 | Fixed profileId dict→str in Late MCP |
-| 2026-02-28 | Self-healing diagnostics (session-end protocol) | 0.85 | self-heal.md command created and tested |
-| 2026-02-28 | OpenClaw-enhanced brain architecture (V5.0) | 0.90 | brain/ directory, 10-step loop, heartbeat |
-| 2026-02-28 | Gemini CLI Integration (v0.31.0) | 0.95 | Installed `@google/gemini-cli` globally |
-
-## Learning Velocity
-
-*Track how fast Bravo is acquiring new capabilities.*
-
-- **Sessions to date:** 5
-- **Capabilities acquired:** 6
-- **Mistakes logged:** 7 (all with prevention strategies)
-- **Patterns established:** 4 effective + 4 anti-patterns
-- **SOPs created:** 0 (tracking begins now)
-
-## Evolution Goals
-
-### Short-Term (Next 5 Sessions)
-- [ ] First successful Supabase query via MCP
-- [ ] First n8n workflow created via MCP
-- [ ] First SOP auto-generated from repeated task
-- [ ] Achieve 90%+ task completion rate
-- [ ] Build first competitive analysis via Playwright
-
-### Medium-Term (Next 30 Days)
-- [ ] 10+ SOPs in SOP_LIBRARY.md
-- [ ] Memory confidence scoring operational
-- [ ] Self-healing detects and fixes 3+ issue types autonomously
-- [ ] Content creation pipeline fully automated (ideation → writing → posting)
-- [ ] First headless execution via n8n → Telegram → CLI
-
-### Long-Term (90 Days)
-- [ ] Fully autonomous daily operations (heartbeat handles routine)
-- [ ] 50+ capabilities in frontier
-- [ ] Self-learning loop operational (pattern → SOP → skill)
-- [ ] Cross-session context maintained via Supabase
-- [ ] CC can issue single commands that trigger full workflows
-
-## Pattern-to-SOP Pipeline
-
-*When a pattern is used 3+ times, it should become an SOP.*
-
-| Pattern | Usage Count | SOP Status |
-|---------|------------|------------|
-| Late API posting flow | 2 | Watching (1 more → SOP) |
-| Git branch → PR → Vercel preview | 1 | Watching |
-| Playwright research → brief synthesis | 0 | Not started |
-
-## Self-Assessment Triggers
-
-Bravo should self-assess when:
-1. A task type is attempted for the 3rd time (pattern extraction opportunity)
-2. A new mistake is logged (prevention strategy needed)
-3. A session exceeds 10 tool calls without resolution (complexity assessment)
-4. CC expresses frustration or redirects (communication calibration)
-5. Monthly (via /monthly-audit command)
+Current limit: **Disconnected cloud triggers.**
+Next level: **Daemon Heartbeat.**
+Plan: Use n8n to proactively "poke" the Telegram bridge every 30m to run autonomous audits.

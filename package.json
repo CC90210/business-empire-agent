@@ -20,6 +20,7 @@
   "homepage": "https://github.com/CC90210/business-empire-agent#readme",
   "dependencies": {
     "@google/genai": "^1.43.0",
+    "@notionhq/client": "^5.11.0",
     "@supabase/supabase-js": "^2.98.0",
     "dotenv": "^17.3.1",
     "node-telegram-bot-api": "^0.67.0"
