@@ -6,6 +6,7 @@
 # MCP config files containing tokens
 references/Claude_Global_MCP.json
 references/Claude_Global_Settings.json
+.claude/mcp.json
 
 # Node modules (if any get created by npx)
 node_modules/
@@ -40,6 +41,7 @@ n8n_workflows.json
 # Standalone scripts at root (agent junk prevention)
 *.js
 !skills/**/*.js
+!telegram_agent.js
 
 # Agent-generated workaround files
 *_post*.js

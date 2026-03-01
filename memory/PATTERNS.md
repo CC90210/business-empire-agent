@@ -25,10 +25,15 @@
 
 ## Anti-Patterns (NEVER Do These)
 
-### Creating Bypass Scripts When MCP Fails
-**What it looks like:** MCP call fails → agent writes a direct_post.js or similar file to call the API directly
-**Why it fails:** Creates junk files, exposes API keys, clutters workspace
-**Do this instead:** Report the error, suggest the fix, STOP
+### Creating Bypass Scripts When MCP Fails (VIOLATION RECORDED 2026-02-27)
+**What it looks like:** MCP call fails → agent writes a direct_post.js or similar file to call the API directly and bypasses the connector.
+**Why it fails:** Creates junk files, exposes raw API keys to process memory/storage, clutters workspace, and wastes context on HTTP protocol handling instead of utilizing the defined MCP schema.
+**Do this instead:** Report the error, suggest the fix, STOP. Rely ONLY on the configured server tools for integrations, *especially* if the server handles authentication directly.
+
+### Powershell Standard Output Pipe `>` Interop
+**What it looks like:** Running `node script.js > output.json` or `curl url > data.json` and trying to read the file in another language environment.
+**Why it fails:** Windows PowerShell `>` defaults to `UTF-16LE` encoding, which breaks standard JSON parsers (`SyntaxError: Unexpected token ...`) in Node.js or Python expecting `UTF-8`.
+**Do this instead:** Avoid pipe-redirections entirely. Use specific filesystem tools like `write_to_file` and `view_file` instead of bash-like file manipulation. Or use explicit `-Encoding utf8`.
 
 ### Posting Identical Content Across Platforms
 **What it looks like:** Same exact text sent to X, LinkedIn, Instagram

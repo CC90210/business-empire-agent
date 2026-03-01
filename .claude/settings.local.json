@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -1d /c/Users/User/Business-Empire-Agent/skills/*/)",
+      "Bash(for dir in /c/Users/User/Business-Empire-Agent/skills/*/)",
+      "Bash(do)",
+      "Bash(if [ -f \"$dir/SKILL.md\" ])",
+      "Bash(then)",
+      "Bash(else)",
+      "Bash(fi)",
+      "Bash(done)",
+      "mcp__n8n-mcp__search_workflows",
+      "mcp__memory__read_graph",
+      "mcp__late__profiles_list",
+      "mcp__late__posts_list",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_close",
+      "mcp__sequential-thinking__sequentialthinking",
+      "mcp__context7__resolve-library-id",
+      "mcp__supabase__list_projects",
+      "Bash(find brain/ memory/ -name \"*.md\" -exec wc -l {} +)",
+      "Bash(grep -r \"APPS_CONTEXT\\\\|memory/\" brain/*.md AGENT_CORE_DIRECTIVES.md CLAUDE.md)",
+      "Bash(grep -o \"APPS_CONTEXT/[^ \\\\`]*\\\\|memory/[^ \\\\`]*\")",
+      "Bash(echo $SUPABASE_ACCESS_TOKEN)",
+      "Bash(for s in self-healing sop-breakdown memory-management growth-engine heartbeat sequential-reasoning)",
+      "Bash(do test -f \"/c/Users/User/Business-Empire-Agent/skills/$s/SKILL.md\")",
+      "Bash(echo \"OK: $s\")",
+      "Bash(echo \"MISSING: $s\")",
+      "Bash(ls -1 /c/Users/User/Business-Empire-Agent/agents/*.md)",
+      "Bash(ls -1 /c/Users/User/Business-Empire-Agent/commands/*.md)",
+      "mcp__late__accounts_list",
+      "mcp__memory__search_nodes",
+      "Bash(ls ~/.claude/*.json)",
+      "Bash(uv python find)",
+      "Bash(where.exe python)",
+      "Bash(uv run --with late-sdk python -c \"from late.models._generated.models import AccountsListResponse, ProfilesListResponse, SocialAccount; print\\(''SUCCESS: All models load correctly''\\)\")",
+      "Bash(ls \"/c/Users/User/AppData/Roaming/uv/tools/late-sdk/Scripts/python\"*)",
+      "Bash(ls \"/c/Users/User/AppData/Roaming/uv/tools/late-sdk/Scripts/\"*.exe)",
+      "Bash(\"/c/Users/User/AppData/Roaming/uv/tools/late-sdk/Scripts/python.exe\" -c \"from late.models._generated.models import AccountsListResponse, ProfilesListResponse, SocialAccount; print\\(''SUCCESS: All models load''\\); AccountsListResponse.model_rebuild\\(\\); print\\(''model_rebuild OK''\\)\")",
+      "mcp__memory__add_observations"
+    ]
+  }
+}
