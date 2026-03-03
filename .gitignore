@@ -1,35 +1,46 @@
-# Environment and secrets
+# =============================================
+# SECRETS & ENVIRONMENT (NEVER COMMIT)
+# =============================================
 .env
 .env.*
 *.env
+!.env.agents.template
 
-# MCP config files containing tokens (contain API keys)
+# MCP config files that contain API keys
 references/Claude_Global_MCP.json
 references/Claude_Global_Settings.json
 .claude/mcp.json
 .vscode/mcp.json
 
-# Node modules (if any get created by npx)
+# =============================================
+# NODE / PYTHON
+# =============================================
 node_modules/
+__pycache__/
+*.pyc
 
-# OS files
+# =============================================
+# OS FILES
+# =============================================
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Anti-Gravity IDE
+# =============================================
+# IDE & AGENT INTERNALS (per-session, not shared)
+# =============================================
 .antigravityignore
+.gemini/antigravity/
 
-# Temporary files
+# =============================================
+# TEMP & DEBUG
+# =============================================
 *.tmp
 *.bak
-
-# Debug artifacts (prevent agent junk from being committed)
 *.log
-*.txt
-!README.txt
+tmp/
 
-# JSON debug dumps at root (keep .json configs in subdirs)
+# JSON debug dumps at root
 mcp_out.json
 late_tools.json
 late_accounts.json
@@ -39,24 +50,22 @@ n8n_workflows.json
 *_raw*.json
 *_debug*.json
 
-# Standalone scripts at root (agent junk prevention)
-*.js
-!skills/**/*.js
-!telegram_agent.js
-
-# Agent-generated workaround files
+# Agent-generated junk scripts at root
 *_post*.js
 *_test*.js
 direct_*.js
 count_*.js
 
-# Python
-__pycache__/
-*.pyc
-
-# Build artifacts
+# =============================================
+# BUILD ARTIFACTS
+# =============================================
 dist/
 build/
 *.local
-
 blobs/
+
+# =============================================
+# MEDIA (large files — use Git LFS or download separately)
+# =============================================
+media/raw/
+media/exports/

@@ -3,6 +3,23 @@
 
 ---
 
+### 2026-03-02 (Session 10) — Business-Empire-Agent (Antigravity / Gemini) — MCP Wrapper Fix & Infrastructure Lock-in
+**Goal:** Fix n8n and Late MCP servers that fail due to env var injection issue. Final infrastructure stabilization.
+**Done:**
+- **Root cause identified:** Antigravity IDE does NOT inject `env` block variables from JSON configs into spawned subprocesses on Windows. n8n received no API URL/key. Late received no LATE_API_KEY.
+- **Fix deployed:** Created `scripts/n8n-mcp-wrapper.cmd` and `scripts/late-mcp-wrapper.cmd` that `set` env vars before launching MCP processes.
+- **Configs updated:** Both `.gemini/settings.json` and `.vscode/mcp.json` now use `cmd /c wrapper.cmd` pattern for n8n and Late.
+- **Stripe & Supabase removed:** CC deleted from MCP store (download errors). Removed from both config files. Will reconfigure manually later.
+- **Verified:** N8N API returns 44 workflows. Late wrapper starts successfully. 6/6 active servers configured correctly.
+- **Brain files updated:** GEMINI.md (Rule 2.6 added), CAPABILITIES.md (wrapper pattern documented), STATE.md, ACTIVE_TASKS.md all synced.
+**Architecture Changes:**
+- Windows MCP pattern: `cmd /c scripts/xxx-wrapper.cmd` replaces unreliable `env` JSON blocks for any server needing env vars.
+- Reduced to 6 active servers (from 8). Stripe & Supabase will return when manually configured.
+**Stats:** 2 wrapper scripts created, 2 MCP configs rewritten, 5 brain/memory files updated.
+**Next:** IDE restart → test all 6 servers → Monday execution begins.
+
+---
+
 ### 2026-03-02 (Session 2) — Business-Empire-Agent (Claude Code / Opus 4.6) — Telegram Fix + Lead Outreach
 **Goal:** Fix Telegram bot not responding + research local leads + draft outreach emails.
 **Done:**

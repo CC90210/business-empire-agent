@@ -28,11 +28,12 @@
 **Why it works:** Prevents junk file creation and infinite retry loops that waste context
 **Sessions validated:** 5 | **Last used:** 2026-03-01
 
-### Windows MCP Env Variable Fix `[PROBATIONARY]`
-**Context:** MCP server needs an environment variable (e.g., LATE_API_KEY) but the `env` field in config doesn't pass through on Windows
-**Pattern:** Replace `"command": "uvx", "env": {"KEY": "val"}` with `"command": "cmd", "args": ["/c", "set KEY=val&& uvx ..."]`. The `cmd /c set` approach bypasses the MCP client's env handling.
-**Why it works:** Windows MCP clients (Claude Code, Gemini) don't reliably forward `env` field to subprocesses. `cmd /c set` injects the var into the shell environment directly.
-**Sessions validated:** 1 | **Last used:** 2026-03-01
+### Windows MCP Env Variable Fix `[VALIDATED]`
+**Context:** MCP server needs an environment variable (e.g., LATE_API_KEY, N8N_API_URL) but the `env` field in JSON config doesn't pass through on Windows
+**Pattern:** Create a dedicated `.cmd` wrapper script in `scripts/` that `set`s all required env vars, then launches the MCP server. Point the JSON config to `"command": "cmd", "args": ["/c", "path/to/wrapper.cmd"]`. Example: `scripts/late-mcp-wrapper.cmd` sets `LATE_API_KEY` then runs `uvx --from "late-sdk[mcp]" late-mcp`.
+**Why it works:** Windows MCP hosts (Antigravity IDE, Gemini CLI) don't reliably forward `env` field to subprocesses. The wrapper script injects vars into the shell before the process starts.
+**Wrapper scripts:** `scripts/n8n-mcp-wrapper.cmd`, `scripts/late-mcp-wrapper.cmd`
+**Sessions validated:** 4 | **Last used:** 2026-03-02
 
 ### Multi-Hypothesis Approach `[PROBATIONARY]`
 **Context:** Any MODERATE+ complexity task

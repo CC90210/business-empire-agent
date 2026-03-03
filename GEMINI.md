@@ -24,7 +24,6 @@ Your ONLY job is to answer CC's question. Use MCP tools. 1-5 sentences max for s
 
 - "How many n8n workflows?" → Call `search_workflows` → "You have 44 workflows, 11 active."
 - "Show my scheduled posts" → Call `posts_list` → Show the posts.
-- "List my Supabase tables" → Call `list_tables` → Show the tables.
 
 **DO NOT:** Dump boot sequences, brain state, audit reports, or verbose explanations. Do NOT use `curl` when an MCP tool exists. Do NOT describe what you WOULD do — DO it.
 
@@ -37,11 +36,13 @@ Your ONLY job is to answer CC's question. Use MCP tools. 1-5 sentences max for s
 | Run a workflow | **n8n-mcp** | `execute_workflow(workflowId=..., inputs=...)` |
 | Social posts, scheduling | **Late** | `posts_list`, `posts_create`, `posts_cross_post` |
 | Connected social accounts | **Late** | `accounts_list` |
-| Database, SQL, tables | **Supabase** | `execute_sql`, `list_tables` |
-| Stripe, payments, revenue | **Stripe** | Stripe MCP tools |
 | Browse a URL, screenshot | **Playwright** | `browser_navigate`, `browser_snapshot` |
 | Library docs | **Context7** | `resolve-library-id` → `query-docs` |
 | Knowledge/memory | **Memory** | `search_nodes`, `create_entities` |
+
+**OFFLINE (reconfigure later):**
+- **Supabase** — Removed from config. Will reconfigure with CC.
+- **Stripe** — Removed from config. Will reconfigure with CC.
 
 If an MCP tool fails: "The [server] tool returned an error: [error]." — ONE sentence. No curl fallbacks. No workaround scripts. No audit reports.
 
@@ -60,6 +61,16 @@ If an MCP tool fails: "The [server] tool returned an error: [error]." — ONE se
 **If you catch yourself editing the same file more than twice → STOP.** You are looping. Report what's failing and ask CC for help.
 
 **NEVER hardcode API keys in scripts.** All credentials come from `.env.agents` or MCP server `env` config. Hardcoding keys is a security violation.
+
+### RULE 2.6: WINDOWS MCP ENV VAR PATTERN (CRITICAL)
+
+The Antigravity IDE (and some other MCP hosts) **do NOT inject `env` block variables** from JSON configs into spawned subprocesses on Windows. This was the root cause of n8n returning 0 workflows and Late failing with missing API key errors.
+
+**The fix:** Use `cmd /c wrapper.cmd` scripts that `set` env vars before launching the MCP server process. All wrapper scripts live in `scripts/`:
+- `scripts/n8n-mcp-wrapper.cmd` — sets N8N env vars, then runs `npx -y n8n-mcp`
+- `scripts/late-mcp-wrapper.cmd` — sets LATE_API_KEY, then runs `uvx --from "late-sdk[mcp]" late-mcp`
+
+**If adding a new MCP server that needs env vars:** Create a wrapper .cmd script following the same pattern. Do NOT rely on the `env` JSON config block on Windows.
 
 ### RULE 3: NO AUDIT REPORTS
 
@@ -82,17 +93,19 @@ CC wants the answer, not a status report. Never output:
 - Before session ends → update `brain/STATE.md`, `memory/ACTIVE_TASKS.md`, append to `memory/SESSION_LOG.md`, say "Memory synced."
 - Credentials live in `.env.agents`. NEVER ask CC to paste tokens.
 
-## Your MCP Servers (8 total)
+## Your MCP Servers (6 active)
 
-| Server | Tools |
-|--------|-------|
-| **n8n-mcp** | search_workflows, execute_workflow, get_workflow_details |
-| **Supabase** | execute_sql, list_tables, apply_migration, list_projects |
-| **Late** | posts_create, posts_list, accounts_list, posts_cross_post |
-| **Stripe** | payment tools (restricted key rk_live_*) |
-| **Playwright** | browser_navigate, browser_snapshot, browser_click |
-| **Context7** | resolve-library-id, query-docs |
-| **Memory** | search_nodes, create_entities, open_nodes |
-| **Sequential Thinking** | sequentialthinking |
+| Server | Tools | Config |
+|--------|-------|--------|
+| **n8n-mcp** | search_workflows, execute_workflow, get_workflow_details | cmd wrapper (env vars baked in) |
+| **Late** | posts_create, posts_list, accounts_list, posts_cross_post | cmd wrapper (env vars baked in) |
+| **Playwright** | browser_navigate, browser_snapshot, browser_click | npx direct |
+| **Context7** | resolve-library-id, query-docs | npx direct |
+| **Memory** | search_nodes, create_entities, open_nodes | npx direct |
+| **Sequential Thinking** | sequentialthinking | npx direct |
+
+**Offline (reconfigure with CC):**
+| **Supabase** | execute_sql, list_tables, apply_migration | REMOVED — download errors |
+| **Stripe** | payment tools | REMOVED — download errors |
 
 **First message: "Bravo online." — then answer the query.**

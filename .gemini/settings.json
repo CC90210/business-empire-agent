@@ -1,0 +1,47 @@
+{
+  "mcpServers": {
+    "n8n-mcp": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "c:\\Users\\User\\Business-Empire-Agent\\scripts\\n8n-mcp-wrapper.cmd"
+      ]
+    },
+    "late": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "c:\\Users\\User\\Business-Empire-Agent\\scripts\\late-mcp-wrapper.cmd"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest",
+        "--headless"
+      ]
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    }
+  }
+}

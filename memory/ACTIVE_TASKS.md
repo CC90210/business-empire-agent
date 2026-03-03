@@ -17,7 +17,8 @@ To reach this goal, we need **3 new clients** for OASIS (assuming ~$300-$500/mo 
 - [x] [P0] Fix Telegram Bot — Updated to V5.5 query-first routing, removed dead CC_PROFILE.md ref, restarted. Now running.
 - [x] [P0] Fix Agent Entry Points — GEMINI.md, ANTIGRAVITY.md, telegram_agent.js all use query-first routing.
 - [x] [P1] Lead Research — 15+ local businesses & DJs researched. Owners identified.
-- [ ] [P0] IDE Restart — Restart Claude Code + Gemini CLI to pick up new MCP configs (CRITICAL)
+- [x] [P0] MCP Infrastructure Fix — Root cause: IDE doesn't inject env vars. Fix: cmd wrapper scripts for n8n & Late. Stripe & Supabase removed (will reconfigure manually). 6/6 active servers ready.
+- [ ] [P0] **IDE RESTART** — Restart to pick up new wrapper configs. All 6 servers should work after this.
 - [ ] [P0] Create reusable Google Meet link — Store in .env.agents as GOOGLE_MEET_LINK
 - [x] [P1] Send outreach emails — 13 emails sent (3 RE, 7 Local Business, 3 DJs) with Meet invites attached.
 - [x] [P1] PropFlow Follow-up — Sent stern but professional follow-up email to Pazit regarding the 50/50 partnership and NDA status.
@@ -26,6 +27,8 @@ To reach this goal, we need **3 new clients** for OASIS (assuming ~$300-$500/mo 
 - [ ] [P1] OASIS Content Engine — Post first authority-building LinkedIn/X content (The "Why AI" pivot)
 - [ ] [P1] Build Lead Tracker — Create simple Supabase table to track outreach → replies → meetings
 - [ ] [P2] Add ELEVENLABS_API_KEY to .env.agents — CC to provide key for voiceover generation
+- [ ] [P2] Reconfigure Stripe MCP — Install manually (not from MCP store). Use cmd wrapper if env vars needed.
+- [ ] [P2] Reconfigure Supabase MCP — Install manually (not from MCP store). Use npx with --access-token.
 
 ### Tuesday (March 3) — Outreach Blitz Day 1
 - [ ] [P0] Personalized Outreach — Send 10+ personalized emails to local businesses (HVAC, fitness, wellness)

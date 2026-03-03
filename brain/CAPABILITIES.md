@@ -15,17 +15,26 @@
 | **Supabase** | Database queries, migrations, schema (npx, project-level .claude/mcp.json) | execute_sql, apply_migration, list_tables, list_projects |
 | **Sequential Thinking** | Structured multi-step reasoning | sequentialthinking |
 
-### Anti-Gravity (Gemini — Infantry/Hybrid)
+### Anti-Gravity IDE (Native Local Agent — Multi-Model)
+
+Models: Gemini 3.1 Pro High/Low, Gemini 3 Flash, Claude Sonnet/Opus 4.6, GPT-OSS 120B Medium
+Entry Point: `ANTIGRAVITY.md` | Config: `.vscode/mcp.json`
+Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, content, commit, n8n, sync, research, debug)
+
+**IMPORTANT — Windows env var pattern:** n8n and Late use `cmd /c wrapper.cmd` scripts (in `scripts/`) that `set` env vars before launching. Direct `env` blocks in JSON configs do NOT work on Windows. See `scripts/n8n-mcp-wrapper.cmd` and `scripts/late-mcp-wrapper.cmd`.
+
 | Server | Purpose | Config |
 |--------|---------|--------|
-| **n8n-mcp** | Workflow automation (community REST API) | npx n8n-mcp + env |
-| **Supabase** | Database operations | npx @supabase/mcp-server-supabase |
-| **Late** | Social media posting | uvx late-sdk[mcp] + env |
-| **Stripe** | Payment management (3 brands) | npx @stripe/mcp |
+| **n8n-mcp** | Workflow automation (44 workflows, REST API) | `cmd /c scripts/n8n-mcp-wrapper.cmd` |
+| **Late** | Social media posting (8+ platforms) | `cmd /c scripts/late-mcp-wrapper.cmd` |
 | **Playwright** | Browser automation, web research | npx @playwright/mcp --headless |
 | **Context7** | Live library documentation | npx @upstash/context7-mcp |
 | **Memory** | Persistent knowledge graph | npx @modelcontextprotocol/server-memory |
 | **Sequential Thinking** | Multi-step reasoning | npx @modelcontextprotocol/server-sequential-thinking |
+
+**OFFLINE (reconfigure with CC):**
+| **Supabase** | Database operations | REMOVED — MCP store download errors |
+| **Stripe** | Payment management | REMOVED — MCP store download errors |
 
 ### Blackbox AI (Rapid Execution)
 - No MCPs — CLI + file access only
@@ -36,8 +45,9 @@
 - Entry Point: `GEMINI.md`
 - Purpose: Fast diagnostics, file system cleanup, automated audits, heartbeat monitoring, fallback execution
 - Interface: `gemini` command (global npm)
-- MCP Access (via global .gemini/settings.json): Supabase, n8n, Stripe, Sequential Thinking, Playwright, Late, Context7, Memory
-- Note: GitHub MCP disabled globally to avoid 100-tool limit
+- MCP Access (via `.gemini/settings.json`): n8n, Late, Playwright, Context7, Memory, Sequential Thinking (6 active servers)
+- Offline: Supabase, Stripe (removed — will reconfigure with CC)
+- Note: Config synced with `.vscode/mcp.json`. n8n and Late use `cmd /c wrapper.cmd` pattern for env vars.
 
 ## Supabase Projects
 
