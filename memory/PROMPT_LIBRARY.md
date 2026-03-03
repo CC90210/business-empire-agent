@@ -4,7 +4,7 @@
 
 ## 1. THE "BRAIN-FIRST" BOOT (Universal)
 *Use this for any fresh session or new model.*
-> **"Execute Bravo V5.3 Boot: Proactively read SOUL.md, STATE.md, and ACTIVE_TASKS.md. You have TOTAL ACCESS to all skills/ and commands/."**
+> **"Execute Bravo V5.4 Boot: Proactively read SOUL.md, STATE.md, and ACTIVE_TASKS.md. You have TOTAL ACCESS to all skills/ and commands/."**
 
 ## 2. TASK-SPECIFIC TRIGGERS
 *Copy and paste the header + your specific request.*

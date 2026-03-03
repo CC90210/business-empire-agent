@@ -1,33 +1,63 @@
 # ACTIVE TASKS
 > Read this FIRST at the start of every session. Priority is marked with [P0] Critical, [P1] High, [P2] Medium.
 
-## Completed
+## Target: $1,000 Net MRR by March 31, 2026
 
-- [x] [P0] V5.0-V5.4 Brain Architecture — SOUL, STATE, Multi-Project Supabase Sync, n8n/Gmail/Notion Integration
-- [x] [P0] Autonomous Telegram Bridge — telegram_agent.js optimized with V5.4 Proactive Wrapper
-- [x] [P1] Supabase Brain Seed — Memories and User Context successfully uploaded to BRAVO project (2026-03-01)
-- [x] [P1] Fix Late MCP Pydantic errors — All uv cache models patched (2026-02-28)
-- [x] [P1] Gmail & Notion Credentials — Securely linked in .env.agents (2026-03-01)
-- [x] [P1] GitHub Sync — Resolved 3GB blob blocking issue and updated .gitignore (2026-03-01)
+To reach this goal, we need **3 new clients** for OASIS (assuming ~$300-$500/mo retainer or high-ticket setup fee).
 
-## In Progress
+### Current Progress
+- **Current Net:** ~$191
+- **Gap to Goal:** +$809 Net
+- **Next Milestone:** Close 1st client of March by **March 10**.
 
-- [ ] [P1] Configure n8n MCP trigger nodes — Waiting for CC to add trigger nodes in UI
-- [ ] [P0] First content creation session — Generate 5 content ideas for the week (Proactive trigger ready)
+## Weekly Blitz (March 2-8, 2026)
 
-## Up Next
+### Monday (March 2) — Infrastructure & Authority Boost
+- [x] [P0] IDE Restart — Finalize all MCP connections DONE 2026-03-02: All 4 config files synced (8 servers each), using reliable 'env' object.
+- [x] [P0] Fix Telegram Bot — Updated to V5.5 query-first routing, removed dead CC_PROFILE.md ref, restarted. Now running.
+- [x] [P0] Fix Agent Entry Points — GEMINI.md, ANTIGRAVITY.md, telegram_agent.js all use query-first routing.
+- [x] [P1] Lead Research — 15+ local businesses & DJs researched. Owners identified.
+- [ ] [P0] IDE Restart — Restart Claude Code + Gemini CLI to pick up new MCP configs (CRITICAL)
+- [ ] [P0] Create reusable Google Meet link — Store in .env.agents as GOOGLE_MEET_LINK
+- [x] [P1] Send outreach emails — 13 emails sent (3 RE, 7 Local Business, 3 DJs) with Meet invites attached.
+- [x] [P1] PropFlow Follow-up — Sent stern but professional follow-up email to Pazit regarding the 50/50 partnership and NDA status.
+- [x] [P1] Video Production Pipeline — FFmpeg 8.0.1, Python 3.12, Whisper, ElevenLabs, Remotion 4.0.431 all installed. Pipeline tested end-to-end.
+- [x] [P1] Agent Enhancement — 5 new commands (/plan-feature, /execute, /prime, /commit, /create-prd), 2 new skills (browser-automation, e2e-testing), .agents/plans/ dir, CAPABILITIES.md updated. Inspired by Cole Medin's link-in-bio repo.
+- [ ] [P1] OASIS Content Engine — Post first authority-building LinkedIn/X content (The "Why AI" pivot)
+- [ ] [P1] Build Lead Tracker — Create simple Supabase table to track outreach → replies → meetings
+- [ ] [P2] Add ELEVENLABS_API_KEY to .env.agents — CC to provide key for voiceover generation
 
-- [ ] [P0] Test heartbeat protocol — First session with V5.4 brain-first boot via Telegram
-- [ ] [P1] Build competitive analysis workflow (Playwright-based)
-- [ ] [P2] Install Remotion Agent Skills for video production
-- [ ] [P2] Set up Whisper for local caption generation
-- [ ] [P2] Configure ElevenLabs for voiceover
-- [ ] [P2] Set up n8n → Telegram → CLI heartbeat for daemon mode
+### Tuesday (March 3) — Outreach Blitz Day 1
+- [ ] [P0] Personalized Outreach — Send 10+ personalized emails to local businesses (HVAC, fitness, wellness)
+- [ ] [P0] Objection Handling Prep — Draft a one-pager on "The Leverage of AI for Local Services"
+- [ ] [P1] Follow-ups — Use n8n to track email opens and trigger follow-up tasks
+
+### Wednesday (March 4) — Closing & Content
+- [ ] [P0] Initial Calls — Goal: Book 2 meetings for Thursday/Friday
+- [ ] [P1] OASIS Content Engine — Post second authority-building content piece
+- [ ] [P2] Refine Sales Pitch — Focus on ROI and leverage, not "cool tech"
+
+### Thursday (March 5) — Outreach Blitz Day 2
+- [ ] [P0] Personalized Outreach — Send 10+ more personalized emails
+- [ ] [P1] OASIS Content Engine — Post third authority-building content piece
+- [ ] [P1] Track metrics — Analyze open rates and response rates
+
+### Friday (March 6) — Follow-Up & Finalize
+- [ ] [P0] The "Weekend Closes" — Follow up on all outstanding leads before the weekend
+- [ ] [P1] Review week — What angles converted? What were the main objections?
+- [ ] [P2] Weekend Content Strategy — Schedule authority content for Saturday/Sunday
+
+## Up Next (Week of March 9+)
+
+- [ ] [P0] Onboard first new client of March
+- [ ] [P1] Scale outreach to 15+ emails/day
+- [ ] [P1] Build "High-Ticket Automation Template" for rapid delivery
 
 ## Blocked / Waiting
 
 | Task | Blocked By | Since |
 |------|-----------|-------|
-| n8n workflow automation | No MCP trigger nodes configured in n8n | 2026-02-27 |
+| ~~n8n workflow automation~~ | ~~No MCP trigger nodes~~ **RESOLVED** — switched to community n8n-mcp (REST API), 44 workflows accessible | 2026-02-27 → FIXED 2026-03-02 |
+| PropFlow development | Monitoring — pivoting dev hours to OASIS | 2026-03-01 |
 
-*Last updated: 2026-03-01*
+*Last updated: 2026-03-02*

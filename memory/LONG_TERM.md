@@ -19,8 +19,8 @@
 
 | Fact | Confidence | Source | Last Verified |
 |------|-----------|--------|---------------|
-| OASIS AI Solutions generates $8-12K MRR with 10+ clients | 0.90 | CC stated | 2026-02-26 |
-| CC's partner Adan handles content + client relations | 0.90 | CC stated | 2026-02-26 |
+| OASIS AI Solutions currently at ~$250/mo revenue (target: $8-12K MRR). More invested than returned so far. | 0.95 | CC corrected 2026-03-01 | 2026-03-01 |
+| CC's partner Adon handles content + client relations | 0.90 | CC stated | 2026-02-26 |
 | PropFlow is pre-revenue, in active development | 0.85 | CC stated | 2026-02-26 |
 | CC works weekends at Nicky's Donuts | 0.90 | CC stated | 2026-02-26 |
 
@@ -30,7 +30,9 @@
 |------|-----------|--------|---------------|
 | n8n instance: https://n8n.srv993801.hstgr.cloud | 0.90 | Config file | 2026-02-27 |
 | 0 n8n workflows currently exposed to MCP | 0.85 | Verified via MCP | 2026-02-27 |
-| Telegram bot (telegram_agent.js) routes to Ollama + Claude Code | 0.90 | Read source code | 2026-02-28 |
+| Telegram bot (telegram_agent.js) routes to Gemini CLI + Claude Code | 0.95 | Verified source code V5.4 | 2026-03-01 |
+| Gemini CLI entry point: GEMINI.md (V5.4), has MCP access to Supabase, Playwright, n8n, Late, Seq Thinking | 0.90 | Read GEMINI.md | 2026-03-01 |
+| Late MCP requires LATE_API_KEY env var — currently missing from .env.agents | 0.95 | Tested via Claude Code MCP | 2026-03-01 |
 | __future__ imports must be absolute first line in Python files | 0.95 | Mistake encountered + fixed | 2026-02-27 |
 
 ## Confidence Decay Rules

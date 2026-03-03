@@ -10,29 +10,34 @@
 | **Playwright** | Browser automation, ALL web research, scraping, testing | navigate, snapshot, click, type, evaluate |
 | **Context7** | Live library documentation lookup | resolve-library-id, query-docs |
 | **Memory** | Persistent knowledge graph across sessions | create_entities, search_nodes, open_nodes |
-| **n8n** | Workflow automation management | search_workflows, execute_workflow, get_workflow_details |
+| **n8n** | Workflow automation management (community n8n-mcp via REST API) | search_workflows, execute_workflow, get_workflow_details |
 | **Late** | Social media posting (8+ platforms) | posts_create, posts_list, accounts_list, posts_cross_post |
 | **Supabase** | Database queries, migrations, schema (npx, project-level .claude/mcp.json) | execute_sql, apply_migration, list_tables, list_projects |
 | **Sequential Thinking** | Structured multi-step reasoning | sequentialthinking |
 
-### Anti-Gravity (Gemini 3.1 Pro — Infantry/Hybrid)
+### Anti-Gravity (Gemini — Infantry/Hybrid)
 | Server | Purpose | Config |
 |--------|---------|--------|
-| **GitHub** | Remote git ops, PRs, branches, file editing | npx github-mcp |
-| **Late** | Social media posting | uvx late-sdk[mcp] |
-| **Stripe** | Payment management (3 brands) | npx @stripe/mcp --tools=all |
+| **n8n-mcp** | Workflow automation (community REST API) | npx n8n-mcp + env |
 | **Supabase** | Database operations | npx @supabase/mcp-server-supabase |
+| **Late** | Social media posting | uvx late-sdk[mcp] + env |
+| **Stripe** | Payment management (3 brands) | npx @stripe/mcp |
+| **Playwright** | Browser automation, web research | npx @playwright/mcp --headless |
+| **Context7** | Live library documentation | npx @upstash/context7-mcp |
+| **Memory** | Persistent knowledge graph | npx @modelcontextprotocol/server-memory |
 | **Sequential Thinking** | Multi-step reasoning | npx @modelcontextprotocol/server-sequential-thinking |
-| **Chrome** | Built-in browser (replaces Playwright) | Native to IDE |
 
 ### Blackbox AI (Rapid Execution)
 - No MCPs — CLI + file access only
 - For: boilerplate, simple edits, isolated functions
 
-### Gemini CLI (Diagnostic & Inference)
-- Tool: `@google/gemini-cli` (v0.31.0)
-- Purpose: Direct local inference, diagnostic support, fallback agent
-- Interface: `gemini` command
+### Gemini CLI (Diagnostic & Inference — 4th Tier)
+- Tool: `@google/gemini-cli`
+- Entry Point: `GEMINI.md`
+- Purpose: Fast diagnostics, file system cleanup, automated audits, heartbeat monitoring, fallback execution
+- Interface: `gemini` command (global npm)
+- MCP Access (via global .gemini/settings.json): Supabase, n8n, Stripe, Sequential Thinking, Playwright, Late, Context7, Memory
+- Note: GitHub MCP disabled globally to avoid 100-tool limit
 
 ## Supabase Projects
 
@@ -61,10 +66,15 @@
 | workflow-builder | Sonnet | n8n automation creation |
 | writer | Sonnet | Code writing, feature implementation |
 
-## Commands (16)
+## Commands (21)
 
 | Command | Trigger |
 |---------|---------|
+| /plan-feature | **Deep codebase analysis → implementation plan** (parallel sub-agents, validation commands, confidence scoring) |
+| /execute | **Execute plan step-by-step** with verification gates |
+| /prime | **Load full project context** — brain, memory, git, MCP health |
+| /commit | **Smart commit** — conventional format (`bravo: type — desc`), staged analysis |
+| /create-prd | **Generate PRD** for client projects (15-section structure) |
 | /add-feature | Plan & build new feature |
 | /build-workflow | n8n automation creation |
 | /cleanup | Remove junk files |
@@ -82,18 +92,19 @@
 | /self-heal | Session-end diagnostics |
 | /status | Project status report |
 
-## Skills (37)
+## Skills (40)
 
 | Category | Skills |
 |----------|--------|
 | **Agent Intelligence** | heartbeat, self-healing, memory-management, growth-engine, sop-breakdown, sequential-reasoning |
 | **Development** | systematic-debugging, TDD, verification, executing-plans, writing-plans, finishing-branch, git-worktrees |
+| **Browser & Testing** | **browser-automation** (Playwright MCP reference), **e2e-testing** (parallel sub-agent E2E), webapp-testing |
 | **Content** | writing-skills, doc-coauthoring, internal-comms, brand-guidelines, brainstorming |
 | **Code** | mcp-builder, skill-creator, subagent-development, parallel-agents, code-review (2) |
 | **Automation** | n8n-mcp-integration, n8n-patterns, supabase-patterns, ai-integration |
 | **Creative** | frontend-design, canvas-design, algorithmic-art, theme-factory, web-artifacts |
 | **Files** | pdf, docx, pptx, xlsx |
-| **Security** | security-protocol, webapp-testing, using-superpowers |
+| **Security** | security-protocol, using-superpowers |
 | **Meta** | slack-gif-creator |
 
 ## External Services (No MCP)
@@ -103,17 +114,30 @@
 | n8n | n8n-mcp / API | Workflow automation (Full CRUD via Bravo) |
 | Gmail | API / SMTP | Email drafting, research, and approval-based sending |
 | Notion | API | Task tracking, project management, and knowledge base |
-| ElevenLabs | Chrome/API | Voice & audio generation |
+| ElevenLabs | Python SDK | Voice & audio generation (elevenlabs pip package) |
 | Vercel | Git push auto-deploy | Hosting & previews |
 | GoHighLevel | n8n webhooks | CRM for OASIS clients |
 | Twilio | API/n8n | SMS & voice (Nostalgic Requests) |
 | Shopify | Admin UI | FromOasis e-commerce |
-| Telegram | telegram_agent.js | CLI bridge for remote execution |
+| Telegram | telegram_agent.js (V5.5) | CLI bridge for remote execution — routes to Gemini/Claude via query-first pattern. Start: `npm run telegram` |
+
+## Video Production Pipeline
+
+| Tool | Version | Purpose |
+|------|---------|---------|
+| FFmpeg | 8.0.1 (full build) | Video encoding, overlays, captions, audio normalization |
+| Python | 3.12.10 | Script runtime for edit_content.py |
+| Whisper | openai-whisper | Auto-transcription → SRT captions |
+| ElevenLabs | elevenlabs SDK | Text-to-speech voiceover generation |
+| Remotion | 4.0.431 | Programmatic video/animation generation |
+
+Pipeline script: `scripts/edit_content.py` — probe, transcribe, voiceover, edit
+Agent: `agents/video-editor.md` | Command: `/edit-video`
 
 ## Tech Stack
 
 - **OS:** Windows 11 (Desktop), macOS (MacBook)
-- **Languages:** TypeScript (primary), Python (MCP servers)
+- **Languages:** TypeScript (primary), Python (video pipeline, MCP servers)
 - **Frameworks:** Next.js 14 (App Router), Tailwind CSS
 - **Database:** Supabase (PostgreSQL) — 3 projects, 10-table agent schema
 - **Hosting:** Vercel (auto-deploy from git)

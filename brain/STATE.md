@@ -1,47 +1,50 @@
-# STATE — Current Operational State
+# STATE — Current Operational State (Sunday Night Edition)
 
-> Updated at session start (heartbeat) and session end (self-heal).
-> Provides quick-read situational awareness for any agent interface.
+> Updated 2026-03-01 23:35 | Start of the $1,000 Net MRR Push.
 
 ## Operational Status
 
 | Dimension | Level | Notes |
 |-----------|-------|-------|
-| **Confidence** | 0.95 | V5.4 architecture complete, all integrations verified |
-| **Focus Area** | Business Dominance | Revenue-proactive, empire-building mindset |
-| **Energy** | HIGH | System fully synchronized across Local, Cloud, and Mobile |
-| **Memory Health** | EXCELLENT | Supabase brain seeded, local files optimized |
-| **Infrastructure** | PRODUCTION | GitHub synced, Gmail/Notion linked, Telegram live |
+| **Version** | V5.5 | Self-Evolving Super-Intelligence (Bravo) |
+| **Confidence** | 0.95 | Persona aligned. Strategy: Relentless Outreach + Closing. |
+| **Focus Area** | **Revenue Blitz ($1,000 Net)** | Onboarding 3+ new clients for OASIS by March 31. |
+| **Energy** | AMBITIOUS | Sunday night prep. Monday infrastructure, Tuesday closing. |
+| **Memory Health** | EXCELLENT | All files synced. Goals updated. North Star clear. |
 
-## Active Goals (Next Session)
+## North Star: $1,000 Net MRR by March 31, 2026
 
-1. CC to invite "BRAVO OS" to 5 Notion database pages.
-2. Build "Revenue Hunter" n8n workflow bridge.
-3. First proactive content session (5 ideas) via Telegram.
+1. **Revenue Gap**: Current ~$191 Net -> Target $1,000 Net. Need **+$809 Net**.
+2. **Strategy**: Close 3 local businesses at ~$300-400/mo retainer or high-ticket setup fee.
+3. **Execution**: 10+ high-leverage outreaches daily. No excuses.
+
+## Financial Snapshot (OASIS)
+
+| Item | Current | Target (Mar 31) |
+|------|---------|-----------------|
+| Gross Revenue | ~$250 | ~$1,060+ |
+| Fixed Costs | ~$59 | ~$60 |
+| **Net Income** | **~$191** | **$1,000+** |
 
 ## Known Issues
 
 | Issue | Severity | Status |
 |-------|----------|--------|
-| n8n MCP has 0 exposed workflows | MEDIUM | Waiting for CC to add trigger nodes |
-| Supabase memory duplication | LOW | Manual deduplication needed after multiple seeds |
-
-## System Health
-
-| Component | Status |
-|-----------|--------|
-| Git | Clean & Synced (main) |
-| Workspace | Clean (blobs/ purged) |
-| MCP: Supabase | OK (Multi-project sync) |
-| MCP: n8n | OK (Supergateway active) |
-| Gmail | LINKED (App Password) |
-| Notion | LINKED (API connection ok) |
-| Telegram | LIVE (V5.4 Wrapper) |
+| Telegram bot was not running | RESOLVED | Fixed V5.5 query-first routing, removed dead CC_PROFILE.md ref, restarted. Now running. |
+| MCP servers need IDE restart to pick up config fixes | HIGH | RESTART REQUIRED — all configs updated 2026-03-02 |
+| BRAVO_SUPABASE_SERVICE_ROLE_KEY is anon key duplicate | MEDIUM | CC to provide from dashboard |
+| n8n MCP switched to community package (REST API) | RESOLVED | Was using native endpoint (0 workflows). Now uses n8n-mcp npm + REST API key. 44 workflows, 11 active. |
+| Gemini CLI not routing to MCP tools | RESOLVED | GEMINI.md rewritten with query-first routing. No more boot dumps. |
+| Anti-Gravity not routing to MCP tools | RESOLVED | ANTIGRAVITY.md rewritten. All 8 servers exposed. |
+| All MCP configs synced across 4 locations | RESOLVED | .claude/mcp.json, .vscode/mcp.json, ~/.gemini/settings.json, .env.agents — all 8 servers, matching configs |
+| GOOGLE_MEET_LINK set in .env.agents | RESOLVED | https://meet.google.com/oqd-xpoq-fgw |
+| PropFlow partnership status | RESOLVED | Sent stern but professional follow-up to Pazit; monitoring for reply. |
+| Video production pipeline | RESOLVED | FFmpeg 8.0.1 (full build), Python 3.12.10, Whisper, ElevenLabs, Remotion 4.0.431 — all installed and tested. Missing: ELEVENLABS_API_KEY in .env.agents. |
 
 ## Last Heartbeat
 
-- **Date:** 2026-03-01
-- **Agent:** Gemini CLI (Bravo OS)
-- **Result:** V5.4 Proactive Revenue Engine live. All backend bridges (Supabase, Gmail, Notion) established.
+- **Date:** 2026-03-02 (Session 7 — WAT Framework Implementation)
+- **Agent:** BRAVO via Claude Code
+- **Result:** Implemented WAT framework (Workflows/Agents/Tools) across all entry points. CLAUDE.md rewritten (WHAT/WHY/HOW structure, @imports, ≤85 lines). GEMINI.md and ANTIGRAVITY.md streamlined. telegram_agent.js prompt hardened for brevity + 2min timeout added. AGENT_CORE_DIRECTIVES.md boot sequence replaced with query-first protocol.
 
-*Last updated: 2026-03-01*
+*Last updated: 2026-03-02*

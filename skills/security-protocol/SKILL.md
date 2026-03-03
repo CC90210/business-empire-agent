@@ -1,3 +1,8 @@
+---
+name: security-protocol
+description: Secrets and authentication management. Ensures API keys, tokens, and credentials are NEVER exposed in plain text. Use when handling any credential, API key, or sensitive configuration.
+---
+
 # SECRETS AND AUTHENTICATION MANAGEMENT
 
 > **Purpose:** Ensures API keys, tokens, and database credentials are NEVER exposed in plain text files when different AI platforms interact with this workspace.

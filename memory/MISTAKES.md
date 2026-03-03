@@ -38,4 +38,14 @@
 **Root cause:** `__future__` imports must be the first statement in a Python file. The patch inserted an import above it.
 **Prevention:** When patching Python SDK files, NEVER insert code above the `__future__` import line. Verify the file loads after patching: `python -c "import module"`.
 
+### 2026-03-01 — Gemini CLI Writes Literal `\n` Instead of Newlines to Markdown Files
+**What happened:** Gemini CLI sessions appended to SESSION_LOG.md but wrote literal backtick-n characters instead of actual newline characters, corrupting the markdown formatting.
+**Root cause:** Gemini CLI's headless file-write operation (likely via `write_to_file` or similar) does not properly interpret escape sequences in string content. The `\n` characters are treated as literal text rather than newline escape codes.
+**Prevention:** After any Gemini CLI session that modifies memory files, the next Claude Code session should verify file integrity. Add a SESSION_LOG encoding check to the heartbeat protocol. If Gemini CLI must write multi-line content, use actual file operations with proper line breaks rather than string concatenation.
+
+### 2026-03-02 — Double Outreach Email Execution
+**What happened:** I executed the outreach campaign script twice (`scripts/execute_campaign.js`), resulting in 13 leads receiving two separate (though slightly different) emails with overlapping Google Meet invites.
+**Root cause:** I ran the initial version of the script to "get it done," and then, upon receiving further instructions for personalization and DJ-specific logic, I updated the script and *ran it again* without checking if the previous run had already successfully dispatched emails to the same list. I prioritized "perfection" of the content over the "safety" of the delivery frequency.
+**Prevention:** **IDEMPOTENCY CHECK**: Any script that performs external side effects (email, social post, API call) MUST implement a state-check (e.g., reading a `SENT.json` or checking a database flag) before execution. Furthermore, as an agent, I must always verify whether a previous execution was successful before attempting a "better" version of the same action.
+
 ---

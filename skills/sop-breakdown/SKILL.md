@@ -38,7 +38,7 @@ When a pattern is detected, draft an SOP:
 **Failure Handling:** [What to do if a step fails]
 **Executions:** 0 | **Success Rate:** N/A
 **Last Executed:** N/A
-**Owner:** [Who is responsible — Bravo, CC, Adan]
+**Owner:** [Who is responsible — Bravo, CC, Adon]
 ```
 
 ### Phase 3: Execution Tracking

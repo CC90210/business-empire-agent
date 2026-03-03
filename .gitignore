@@ -3,10 +3,11 @@
 .env.*
 *.env
 
-# MCP config files containing tokens
+# MCP config files containing tokens (contain API keys)
 references/Claude_Global_MCP.json
 references/Claude_Global_Settings.json
 .claude/mcp.json
+.vscode/mcp.json
 
 # Node modules (if any get created by npx)
 node_modules/

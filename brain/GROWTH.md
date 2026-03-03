@@ -1,6 +1,7 @@
-# GROWTH — Learning & Capability Evolution
+# GROWTH — Learning & Capability Evolution (V5.5 Voyager-Enhanced)
 
 > Tracks the agent's journey from a script to a business empire.
+> **V5.5:** Voyager-inspired skill library with compositionality, activation scoring, and probationary validation.
 
 ## Capability Timeline
 
@@ -12,15 +13,49 @@
 | 2026-03-01 | 3 | Multi-Project Sync | Autonomous switching between Bravo, Oasis, and Nostalgic |
 | 2026-03-01 | 3 | Cloud-Local Bridge | n8n, Gmail, and Notion APIs linked to local CLI |
 | 2026-03-01 | 4 | Proactive Persona | System directive mandates gap-identification and revenue focus |
+| 2026-03-01 | 5 | Self-Evolving Intelligence | INTERACTION_PROTOCOL, multi-hypothesis reasoning, Reflexion, activation scoring, tiered logging, Supabase trace sync |
 
-## Skills Acquired (This Session)
+## Skills Acquired (Cumulative)
 
-- **Multi-Project DB Routing**: Ability to manage multiple Supabase environments without key collisions.
-- **Notion Schema Mapping**: Knowledge of CC's internal rituals and task structures.
-- **Autonomous Lead Enrichment**: Logic built for Gmail-to-Playwright-to-Notion pipelines.
+| Skill | Acquired | Uses | Status | Composites |
+|-------|----------|------|--------|------------|
+| Multi-Project DB Routing | 2026-03-01 | 3 | `[VALIDATED]` | — |
+| Notion Schema Mapping | 2026-03-01 | 1 | `[PROBATIONARY]` | — |
+| Autonomous Lead Enrichment | 2026-03-01 | 0 | `[PROBATIONARY]` | Gmail + Playwright + Notion |
+| Social Media Content Pipeline | 2026-02-27 | 2 | `[PROBATIONARY]` | Content Pillars + Late API + Char Validation |
+| Systematic Bug Investigation | 2026-02-27 | 3 | `[VALIDATED]` | Brain Loop + Error Tracing + Minimal Fix |
+| Self-Evolution Architecture | 2026-03-01 | 1 | `[PROBATIONARY]` | Research + File Updates + DB Schema |
+
+## Skill Compositionality (Voyager Pattern)
+
+Complex skills are built from simpler ones. Track dependencies:
+```
+Content Pipeline = Content Pillars + Platform Char Limits + Late API Posting + CC Voice Rules
+Bug Investigation = Brain Loop (Steps 1-8) + Error Log Reading + Hypothesis Generation + Minimal Fix
+Lead Enrichment = Gmail Scanning + Playwright Research + Notion CRM Entry + Data Validation
+Self-Evolution = Research + Pattern Extraction + File Modification + DB Sync + Git Commit
+```
+
+When building new skills, always check if existing skills can be composed rather than building from scratch.
 
 ## Capability Frontier
 
-Current limit: **Disconnected cloud triggers.**
-Next level: **Daemon Heartbeat.**
-Plan: Use n8n to proactively "poke" the Telegram bridge every 30m to run autonomous audits.
+| Current Limit | Next Level | Plan | Priority |
+|---------------|------------|------|----------|
+| Disconnected cloud triggers | Daemon Heartbeat | n8n cron → Telegram → CLI → heartbeat | HIGH |
+| Manual Supabase sync | Auto-sync on file change | Session-end protocol in INTERACTION_PROTOCOL | IN PROGRESS |
+| No cross-session analytics | Performance dashboard | Supabase agent_traces + queries | MEDIUM |
+| Manual SOP creation | Auto-SOP detection | Track task patterns, promote after 3+ executions | MEDIUM |
+| No activation scoring | Memory prioritization | Supabase skill_activation table + refresh function | PLANNED |
+
+## Growth Metrics
+
+Track these across sessions to measure evolution velocity:
+- **Skills validated this month:** [count]
+- **SOPs created this month:** [count]
+- **Mistakes logged (unique):** [count]
+- **Patterns discovered:** [count]
+- **Self-modifications made:** [count]
+- **Average confidence calibration:** [actual success rate vs. predicted confidence]
+
+*Updated: 2026-03-01*

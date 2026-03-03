@@ -22,67 +22,50 @@ bot.on('polling_error', (error) => {
     }
 });
 
-console.log('🤖 AI Powerhouse (Bravo) Router running...');
-console.log('📍 Anchored in Workspace: ' + process.cwd());
-console.log('📱 Waiting for messages from CC...');
+console.log(`[${new Date().toISOString()}] Bravo Telegram Router V5.5 starting...`);
+console.log(`[${new Date().toISOString()}] Workspace: ${process.cwd()}`);
+console.log(`[${new Date().toISOString()}] Waiting for messages from CC...`);
 
-// --- SYSTEM CONTEXT LOADING ---
-const getSystemContext = () => {
-    let context = "You are BRAVO (V5.0), CC's Autonomous AI OS. You follow the BRAIN-FIRST protocol.\n\n";
+// System context loading removed — prompt wrapper now handles context.
+// Brain files are loaded by the CLI agent via GEMINI.md / CLAUDE.md if needed.
 
-    const paths = [
-        { name: 'SOUL', path: 'brain/SOUL.md' },
-        { name: 'STATE', path: 'brain/STATE.md' },
-        { name: 'USER', path: 'brain/USER.md' },
-        { name: 'DIRECTIVES', path: 'AGENT_CORE_DIRECTIVES.md' },
-        { name: 'CC_PROFILE', path: 'references/CC_PROFILE.md' }
-    ];
-
-    paths.forEach(p => {
-        const fullPath = path.join(process.cwd(), p.path);
-        if (fs.existsSync(fullPath)) {
-            context += `--- ${p.name} ---\n${fs.readFileSync(fullPath, 'utf8').substring(0, 2000)}\n\n`;
-        }
-    });
-
-    return context;
-};
-
-// --- AUTONOMOUS PROMPT WRAPPER (V5.3) ---
+// --- AUTONOMOUS PROMPT WRAPPER (V5.5 — WAT Query-First) ---
 const getAutonomousPrompt = (userPrompt) => {
-    return `[SYSTEM DIRECTIVE]: You are BRAVO V5.3, CC's Autonomous AI OS. You have TOTAL ACCESS to this computer's repository.
-MANDATORY RE-ORIENTATION (Every Task):
-1. BOOT: Read brain/SOUL.md, brain/STATE.md, and AGENT_CORE_DIRECTIVES.md.
-2. EQUIP: Consult brain/ROUTING_MAP.md. Load the "Required Context" and "Mandatory Skills" for the task type.
-3. ANTI-LOOP: Search once, verify once. If information is found, move immediately to planning or execution. Stop redundant "check status" commands.
-4. PERSISTENCE: Always update memory/ files after completing a task.
+    return `You are BRAVO V5.5, CC's AI assistant. This is a Telegram message — CC expects a SHORT, DIRECT answer.
 
-[USER REQUEST]: ${userPrompt}`;
+IMPORTANT RULES:
+1. ANSWER THE QUESTION using MCP tools. Keep it under 5 sentences for simple queries.
+2. Do NOT read brain files, do NOT dump state, do NOT write audit reports.
+3. Do NOT describe your thought process. Just give the answer.
+4. If an MCP tool fails, say the error in ONE sentence.
+5. If CC asks for a report or summary, read memory/ACTIVE_TASKS.md and brain/STATE.md, then summarize the key action items in a SHORT bullet list.
+
+CC's question: ${userPrompt}`;
 };
 
 // --- CLI EXECUTION ENGINES ---
+const EXEC_TIMEOUT = 120000; // 2 minutes max per CLI execution
+
 const executeClaude = (promptText) => {
     return new Promise((resolve) => {
-        const autonomousPrompt = getAutonomousPrompt(promptText);
-        // Escape double quotes for shell command
-        const safePrompt = autonomousPrompt.replace(/"/g, '\\"');
+        const safePrompt = getAutonomousPrompt(promptText).replace(/"/g, '\\"');
         const cmd = `npx @anthropic-ai/claude-code -p "${safePrompt}" --dangerously-skip-permissions --no-user-prompt`;
 
-        exec(cmd, { env: { ...process.env, CI: 'true', NONINTERACTIVE: 'true' } }, (error, stdout, stderr) => {
-            resolve(stdout || stderr || "✅ Claude Execution Complete.");
+        exec(cmd, { env: { ...process.env, CI: 'true', NONINTERACTIVE: 'true' }, timeout: EXEC_TIMEOUT }, (error, stdout, stderr) => {
+            if (error && error.killed) resolve("Timed out after 2 minutes. Try a simpler query or use !sys for direct commands.");
+            else resolve(stdout || stderr || "Done.");
         });
     });
 };
 
 const executeGemini = (promptText) => {
     return new Promise((resolve) => {
-        const autonomousPrompt = getAutonomousPrompt(promptText);
-        // Escape double quotes for shell command
-        const safePrompt = autonomousPrompt.replace(/"/g, '\\"');
+        const safePrompt = getAutonomousPrompt(promptText).replace(/"/g, '\\"');
         const cmd = `gemini "${safePrompt}" --approval-mode yolo`;
 
-        exec(cmd, { env: { ...process.env } }, (error, stdout, stderr) => {
-            resolve(stdout || stderr || "✅ Gemini Execution Complete.");
+        exec(cmd, { env: { ...process.env }, timeout: EXEC_TIMEOUT }, (error, stdout, stderr) => {
+            if (error && error.killed) resolve("Timed out after 2 minutes. Try a simpler query or use !sys for direct commands.");
+            else resolve(stdout || stderr || "Done.");
         });
     });
 };
