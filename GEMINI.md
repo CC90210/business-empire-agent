@@ -62,6 +62,11 @@ If an MCP tool fails: "The [server] tool returned an error: [error]." — ONE se
 
 **NEVER hardcode API keys in scripts.** All credentials come from `.env.agents` or MCP server `env` config. Hardcoding keys is a security violation.
 
+### RULE 2.5.1: GLOBAL SECURITY GUIDELINES (CRITICAL)
+- **Secrets:** NEVER hardcode API keys or database passwords. If an exposed secret is detected, STOP and initiate rotation immediately.
+- **Validations:** Validate all inputs at system boundaries. 
+- **Authorizations:** Enforce proper access limits. Sandbox risky scripts in `tmp/`.
+
 ### RULE 2.6: WINDOWS MCP ENV VAR PATTERN (CRITICAL)
 
 The Antigravity IDE (and some other MCP hosts) **do NOT inject `env` block variables** from JSON configs into spawned subprocesses on Windows. This was the root cause of n8n returning 0 workflows and Late failing with missing API key errors.
@@ -79,10 +84,19 @@ CC wants the answer, not a status report. Never output:
 - "I verified by manually checking..."
 - Multi-paragraph infrastructure summaries
 
-### RULE 4: Capabilities awareness
+### RULE 3.5: IN-CHAT OVER ARTIFACTS
 
-- **21 commands** available (see `brain/CAPABILITIES.md`). Key workflow: `/plan-feature` → `/execute` → `/commit`
-- **40 skills** in `skills/` directory. Key: systematic-debugging, self-healing, browser-automation, e2e-testing
+For advisory, prep, brainstorming, or one-off informational tasks — **deliver in chat, NOT as artifact files.**
+Only create files when the content has lasting operational value (scripts, configs, workflows, documentation that other sessions need).
+Always update existing brain/memory files to maintain agent integrity after any task.
+
+### RULE 4: CAPABILITIES & SUB-AGENT ORCHESTRATION
+
+See `brain/AGENTS.md` for the complete subagent registry (14 agents with decision matrix, security protocol, self-improvement protocol).
+Delegation: Complex features → planner. Architecture → architect. Code review → reviewer. Bugs → debugger. Research → researcher.
+
+- **11 workflows** available in `.agents/workflows/`. Key commands: `/status`, `/health`, `/post`, `/commit`, `/sync`
+- **41 skills** in `skills/` directory. Each skill is stored in `skills/[skill-name]/SKILL.md` format (Claude Agent Skills 2.0 structure). Key: systematic-debugging, self-healing, test-driven-development
 - **Video pipeline**: `scripts/edit_content.py` — FFmpeg 8.0.1, Whisper captions, ElevenLabs voiceover, Remotion animations
 - **Plans**: Implementation plans stored in `.agents/plans/`
 - **Media**: `media/raw/` (input), `media/exports/` (output), `media/assets/` (logos, branding)
@@ -92,6 +106,14 @@ CC wants the answer, not a status report. Never output:
 - If task status changed → update `memory/ACTIVE_TASKS.md`
 - Before session ends → update `brain/STATE.md`, `memory/ACTIVE_TASKS.md`, append to `memory/SESSION_LOG.md`, say "Memory synced."
 - Credentials live in `.env.agents`. NEVER ask CC to paste tokens.
+
+### RULE 6: App Registry Routing
+
+When CC mentions modifying code in any app (OASIS, PropFlow, Nostalgic, Grape Vine, Mindset, On The Hill, PING, Echoes):
+1. Load `brain/APP_REGISTRY.md` for the LOCAL PATH
+2. `cd` to that path — all code changes happen THERE
+3. Commit/push from that repo. Log summary in memory/SESSION_LOG.md
+Never store app code in Business-Empire-Agent.
 
 ## Your MCP Servers (6 active)
 
@@ -104,8 +126,8 @@ CC wants the answer, not a status report. Never output:
 | **Memory** | search_nodes, create_entities, open_nodes | npx direct |
 | **Sequential Thinking** | sequentialthinking | npx direct |
 
-**Offline (reconfigure with CC):**
-| **Supabase** | execute_sql, list_tables, apply_migration | REMOVED — download errors |
-| **Stripe** | payment tools | REMOVED — download errors |
+**SDK TOOLS (replaces broken MCPs — run via terminal):**
+| **Supabase** | Database CRUD, 3 projects | `python scripts/supabase_tool.py select <table> --limit 10` |
+| **Stripe** | Balance, customers, invoices, subscriptions | `python scripts/stripe_tool.py balance` |
 
 **First message: "Bravo online." — then answer the query.**

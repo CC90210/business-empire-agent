@@ -59,6 +59,12 @@ If an MCP tool fails: "The [server] tool returned an error: [error]." — ONE se
 
 **NEVER hardcode API keys in scripts.** All credentials come from `.env.agents` or MCP wrapper scripts in `scripts/`.
 
+### RULE 3.1: GLOBAL SECURITY GUIDELINES (CRITICAL)
+- **Secrets:** NEVER hardcode API keys or database passwords. If an exposed secret is detected during review or output, STOP and initiate secret-rotation immediately.
+- **Validations:** Validate all inputs at system boundaries. Cast and sanitize external API payloads.
+- **Authorizations:** Enforce RLS on Supabase. DO NOT leave tables public unless explicitly static data.
+- **Execution:** Sandbox risky scripts in `tmp/` or `.agents/tmp/`. Require user consent for destructive DB operations.
+
 ### RULE 3.5: WINDOWS MCP ENV VAR PATTERN (CRITICAL)
 
 The Antigravity IDE does NOT pass `env` block variables from JSON configs to spawned subprocesses on Windows.
@@ -76,11 +82,14 @@ When CC asks you to fix something, **fix it**. Do NOT create audit documents —
 - Update the config → don't describe what needs updating
 - Create the workflow → don't list what workflows should exist
 
-### RULE 5: Capabilities awareness
+### RULE 5: CAPABILITIES & SUB-AGENT ORCHESTRATION
+
+See `brain/AGENTS.md` for the complete subagent registry (14 agents with decision matrix, security protocol, self-improvement protocol).
+Delegation: Complex features → planner. Architecture → architect. Code review → reviewer. Bugs → debugger. Research → researcher.
 
 - **21 commands** in `commands/` (Claude Code format). Key: `/plan-feature` → `/execute` → `/commit`
 - **Workflows** in `.agents/workflows/` (Antigravity format). Use `/workflow-name` to trigger.
-- **41 skills** in `skills/` directory. Key: systematic-debugging, self-healing, browser-automation, e2e-testing
+- **41 skills** in `skills/` directory. Each skill is stored in `skills/[skill-name]/SKILL.md` format (Claude Agent Skills 2.0 structure). Key: systematic-debugging, self-healing, test-driven-development
 - **Video pipeline**: `scripts/edit_content.py` — FFmpeg 8.0.1, Whisper, ElevenLabs, Remotion
 - **Plans**: Implementation plans in `.agents/plans/`
 - **Media**: `media/raw/` (input), `media/exports/` (output), `media/assets/` (logos, branding)
@@ -91,6 +100,14 @@ When CC asks you to fix something, **fix it**. Do NOT create audit documents —
 - Before session ends → update `brain/STATE.md`, `memory/ACTIVE_TASKS.md`, append to `memory/SESSION_LOG.md`, say "Memory synced."
 - Before posting to social → validate char limits (X=280, LinkedIn=3000, IG=2200, Threads=500, TikTok=4000).
 - Credentials live in `.env.agents`. NEVER ask CC to paste tokens.
+
+### RULE 7: App Registry Routing
+
+When CC mentions modifying code in any app (OASIS, PropFlow, Nostalgic, Grape Vine, Mindset, On The Hill, PING, Echoes):
+1. Load `brain/APP_REGISTRY.md` for the LOCAL PATH
+2. `cd` to that path — all code changes happen THERE
+3. Commit/push from that repo. Log summary in memory/SESSION_LOG.md
+Never store app code in Business-Empire-Agent.
 
 ## MCP Servers (6 active)
 
@@ -103,9 +120,9 @@ When CC asks you to fix something, **fix it**. Do NOT create audit documents —
 | **Memory** | search_nodes, create_entities, open_nodes | npx direct |
 | **Sequential Thinking** | sequentialthinking | npx direct |
 
-**Offline (reconfigure with CC):**
-| **Supabase** | execute_sql, list_tables | REMOVED — download errors |
-| **Stripe** | payment tools | REMOVED — download errors |
+**SDK TOOLS (replaces broken MCPs — full capability via terminal):**
+| **Supabase** | Database CRUD, 3 projects | `python scripts/supabase_tool.py select <table> --limit 10` |
+| **Stripe** | Balance, customers, invoices, subscriptions | `python scripts/stripe_tool.py balance` |
 
 ## Config Locations (Keep in Sync)
 

@@ -1,3 +1,5 @@
+> **ROUTING:** Local `C:\Users\User\APPS\oasis-ai-platform` | GitHub: CC90210/oasis-ai-platform | Supabase: sajanpiqysuwviucycjh | Deploy: Vercel
+
 # OASIS AI Solutions
 
 ## Project Overview
@@ -36,7 +38,7 @@ OASIS AI is a Toronto-based AI automation agency serving small-to-medium busines
 
 ## Client Work Standards
 
-> All n8n workflow standards are defined in `AGENT_CORE_DIRECTIVES.md` under "N8N INTEGRATION" and in `skills/n8n-patterns.md`. Follow those — do not duplicate rules here.
+> All n8n workflow standards are defined in `brain/AGENTS.md` under the Workflow Builder subagent and in `skills/n8n-patterns.md`. Follow those — do not duplicate rules here.
 
 ## Website
 

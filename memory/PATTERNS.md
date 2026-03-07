@@ -12,9 +12,26 @@
 
 ### Multi-Agent Task Routing `[VALIDATED]`
 **Context:** Any task that comes into the workspace
-**Pattern:** Simple/isolated tasks → Blackbox or Gemini. Multi-file architecture → Claude Code. Research → Anti-Gravity (has Playwright). Content → Any (all read AGENT_CORE_DIRECTIVES)
+**Pattern:** Simple/isolated tasks → Blackbox or Gemini. Multi-file architecture → Claude Code. Research → Anti-Gravity (has Playwright). Content → Any (all read entry points + brain/)
 **Why it works:** Cost-efficient — Haiku/Gemini for grunt work, Opus for the heavy lifting
 **Sessions validated:** 4 | **Last used:** 2026-03-01
+
+### Outreach Name Separation `[VALIDATED]`
+**Context:** When drafting any outbound emails, social DMs, or lead communications.
+**Pattern:** For professional/B2B/business leads (e.g., OASIS AI), ALWAYS use the full name **Conaugh McKenna**. For DJing/entertainment-related outreach, you may use the nickname **CC**.
+**Why it works:** Maintains a serious, professional image for high-ticket business prospects while keeping the recognized artist name for entertainment gigs.
+**Sessions validated:** 1 | **Last used:** 2026-03-03
+
+### High-Converting Sales Outreach `[PROBATIONARY]`
+**Context:** Drafting outbound emails to new leads.
+**Pattern:** 
+1) **Pattern Interrupt:** Hook them with an immediate observation about their business or an unconventional opening.
+2) **Sales Logic & Personable Tone:** Sound like a genuine person but back it up with hard ROI logic. Do not sound "salesy" or use hustle-culture buzzwords.
+3) **Immediate Value:** Prove you can solve a specific problem off the first rip.
+4) **Incentivize / Make a Promise:** Give them a tangible reason to reply (e.g., "I'll save you 10 hours a week" or an "automation audit").
+5) **DJ connection:** If the lead is a DJ or entertainment company, explicitly mention that Conaugh (CC) is a DJ too to build instant rapport.
+**Why it works:** Cuts through the noise of generic B2B spam, builds rapport instantly, and provides a clear, risk-free next step.
+**Sessions validated:** 1 | **Last used:** 2026-03-03
 
 ### GitHub Remote Edit Strategy `[VALIDATED]`
 **Context:** When deploying changes to client repos (PropFlow, Nostalgic Requests, OASIS)
@@ -54,15 +71,22 @@
 **Applied to:** GEMINI.md, ANTIGRAVITY.md, telegram_agent.js (all 3 agent entry points)
 **Sessions validated:** 3 | **Last used:** 2026-03-02
 
-### Cross-File Sync on Structure Changes `[PROBATIONARY]`
+### Anti-Bloat / File Structure Protocol `[VALIDATED]`
+**Context:** When asked to create documentation, tracking files, or SOPs.
+**Pattern:** Do not create new markdown files unless strictly required for a new tool or distinct architectural domain (like a new CLI command). Always UPDATE existing files (`PATTERNS.md`, `ACTIVE_TASKS.md`, `STATE.md`, `CAPABILITIES.md`).
+**Why it works:** Prevents knowledge fragmentation and confusion across the 12 sub-agents. A lean, consolidated brain is faster and more accurate to query.
+**Sessions validated:** 1 | **Last used:** 2026-03-03
+
+### Cross-File Sync on Structure Changes `[VALIDATED]`
 **Context:** Any change to file structure, MCP configs, agent entry points, or capabilities
 **Pattern:** When changing ANY config or structure file, identify and update ALL files that reference it. Key sync points:
 - MCP configs: `.claude/mcp.json`, `.vscode/mcp.json`, `~/.gemini/settings.json`, `.env.agents`
 - Agent entry points: `GEMINI.md`, `ANTIGRAVITY.md`, `telegram_agent.js`, `CLAUDE.md`
-- Documentation: `brain/CAPABILITIES.md`, `brain/ROUTING_MAP.md`, `skills/mcp-operations/SKILL.md`
+- Documentation: `brain/CAPABILITIES.md`, `brain/AGENTS.md`, `skills/mcp-operations/SKILL.md`
 - Memory: `memory/ACTIVE_TASKS.md`, `brain/STATE.md`
-**Why it works:** Prevents agents from having stale information. ANTIGRAVITY.md was telling agents n8n wasn't available when it was — because it wasn't updated when configs changed.
-**Sessions validated:** 1 | **Last used:** 2026-03-02
+**Critical addition:** After ANY file delete/rename, run `grep -rn "filename" --include="*.md"` to find ALL stale references. Fix every one before committing.
+**Why it works:** Session 12 discovered 15+ broken cross-references from deleting 2 files without scanning. This pattern prevents that.
+**Sessions validated:** 2 | **Last used:** 2026-03-03
 
 ### N8N Community MCP over Native Endpoint `[PROBATIONARY]`
 **Context:** Accessing n8n workflows via MCP
@@ -91,3 +115,24 @@
 **What it looks like:** Agent writes code using method names from training data
 **Why it fails:** Libraries change. Training data is stale.
 **Do this instead:** Always call Context7 to verify current API before writing code
+
+### Deleting Files Without Scanning References
+**What it looks like:** Remove or rename a file, but don't scan the project for files that reference it
+**Why it fails:** Creates 10-20+ broken cross-references. Agents try to read non-existent files and lose context.
+**Do this instead:** After ANY delete/rename: `grep -rn "filename" --include="*.md"` → fix every hit → verify with a second grep.
+
+### Hardcoding Counts in Documentation
+**What it looks like:** Writing "Sub-Agents (12)" or "Skills (40)" in CAPABILITIES.md or README.md
+**Why it fails:** The actual count drifts as files are added/removed. Documentation becomes permanently stale.
+**Do this instead:** During /sync or /commit, verify: `dir agents/*.md | measure | select Count` matches the documented number.
+
+### Evolving Architecture Without Deprecating Old Files
+**What it looks like:** Creating new entry points (CLAUDE.md, ANTIGRAVITY.md) but leaving the old monolithic file (AGENT_CORE_DIRECTIVES.md) in place
+**Why it fails:** Multiple sources of truth. Edits go to the new files, old file rots, agents get confused about which to follow.
+**Do this instead:** When a file is superseded: 1) Delete immediately, 2) Grep for refs, 3) Fix all refs, 4) Log in CHANGELOG.md.
+
+### Calling Google Meet Link a "Calendar" or "Booking" Link `[VALIDATED]`
+**What it looks like:** "Here's my calendar link" or "Book a call" with the Google Meet URL `https://meet.google.com/oqd-xpoq-fgw`
+**Why it fails:** The Google Meet link is a **universal drop-in meeting room** — it does NOT let people pick a time slot, book an appointment, or interact with any calendar. Calling it a "calendar" is misleading and unprofessional.
+**Do this instead:** Use language like: "Here's a quick meeting link — hop on whenever works" or "Here's a meeting link, no scheduling needed." Never say "calendar", "booking", "grab a time slot", or "schedule here" when referring to this link.
+**CC corrected this:** 2026-03-04 | **Severity:** HIGH — affects all outbound communications.

@@ -9,7 +9,7 @@ description: Load full project context — brain, memory, capabilities, and curr
    - `brain/SOUL.md` — Identity and values
    - `brain/STATE.md` — Current operational state
    - `brain/CAPABILITIES.md` — Tool and integration registry
-   - `brain/ROUTING_MAP.md` — Task type routing
+   - `brain/AGENTS.md` — Subagent registry and routing
    - `memory/ACTIVE_TASKS.md` — Pending work
 
 2. Load knowledge graph context:

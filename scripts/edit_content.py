@@ -1,6 +1,7 @@
 import os
 import subprocess
 import json
+import re
 
 # FFmpeg path (winget install location)
 FFMPEG_DIR = os.path.expandvars(r"%LOCALAPPDATA%\Microsoft\WinGet\Packages\Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe\ffmpeg-8.0.1-full_build\bin")
@@ -138,15 +139,52 @@ def edit_video(input_path, output_path, overlays=None, captions_path=None,
     # Add subtitles
     if captions_path and os.path.exists(captions_path):
         safe_subs = captions_path.replace("\\", "/").replace(":", "\\:")
-        font_size = 28 if orientation == "portrait" else 22
-        margin_v = 100 if orientation == "portrait" else 40
+        font_size = 64 if orientation == "portrait" else 48
+        margin_v = 450 if orientation == "portrait" else 100
+        # Color: &H<Alpha><Blue><Green><Red>&
+        YELLOW = "0000FFFF" # BGR
+        WHITE = "00FFFFFF"
         filter_complex += (
             f";[{last_v}]subtitles='{safe_subs}':"
             f"force_style='Alignment=2,FontSize={font_size},MarginV={margin_v},"
-            f"PrimaryColour={PRIMARY_COLOR},OutlineColour={OUTLINE_COLOR},"
-            f"Outline=2,Shadow=0,Bold=1'[vfinal]"
+            f"PlayResX={w},PlayResY={h},"
+            f"PrimaryColour=&H{YELLOW}&,OutlineColour=&H00000000&,"
+            f"BorderStyle=1,Outline=4,Shadow=0,Bold=1'[vcap]"
         )
-        last_v = "vfinal"
+        last_v = "vcap"
+
+    # Creative "Contextual Stickers" Pass (FFmpeg Emojis)
+    stickers = [
+        {"word": "CLOG", "emoji": "🤖", "start_offset": 0, "duration": 2},
+        {"word": "GEMINI", "emoji": "✨", "start_offset": 0, "duration": 2},
+        {"word": "STRIPE", "emoji": "💰", "start_offset": 0, "duration": 2},
+        {"word": "INVOICES", "emoji": "🧾", "start_offset": 0, "duration": 2},
+        {"word": "CLI", "emoji": "💻", "start_offset": 0, "duration": 2},
+        {"word": "HAIRLINE", "emoji": "👨‍🦲", "start_offset": 0, "duration": 3},
+    ]
+
+    if captions_path and os.path.exists(captions_path):
+        with open(captions_path, "r", encoding="utf-8") as f:
+            srt_content = f.read()
+        
+        for s in stickers:
+            # Find timestamp for the word in SRT
+            match = re.search(rf"(\d{{2}}:\d{{2}}:\d{{2}},\d{{3}}) --> (\d{{2}}:\d{{2}}:\d{{2}},\d{{3}})\n.*{s['word']}", srt_content, re.IGNORECASE)
+            if match:
+                start_str = match.group(1).replace(",", ".")
+                # Convert SRT time to seconds for FFmpeg 'between'
+                h, m, s_val = start_str.split(':')
+                start_sec = int(h)*3600 + int(m)*60 + float(s_val)
+                end_sec = start_sec + s.get("duration", 2)
+                
+                # Overlay large emoji in top-right or center-left
+                x = 800 if orientation == "portrait" else 1500
+                y = 400
+                filter_complex += f";[{last_v}]drawtext=text='{s['emoji']}':fontcolor=white:fontsize=120:x={x}:y={y}:enable='between(t,{start_sec},{end_sec})'[v{s['word']}]"
+                last_v = f"v{s['word']}"
+
+    filter_complex += f";[{last_v}]null[vfinal]"
+    last_v = "vfinal"
 
     # Build command
     command = [
@@ -164,7 +202,7 @@ def edit_video(input_path, output_path, overlays=None, captions_path=None,
 
     command.extend([
         "-c:v", "libx264",
-        "-preset", "slow",
+        "-preset", "superfast",
         "-crf", "18",
         "-c:a", "aac",
         "-b:a", "192k",

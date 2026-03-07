@@ -430,12 +430,47 @@ def posts_create(
         minutes = schedule_minutes if schedule_minutes > 0 else 60
         params["scheduled_for"] = datetime.now() + timedelta(minutes=minutes)
 
+    # Use raw HTTP to avoid Pydantic PostCreateResponse validation bug
+    # (accountId comes back as a dict from the API, but Pydantic expects a string)
     try:
-        response = client.posts.create(**params)
-        data = _safe_dump(response)
-        post = data.get("post", {})
+        # Build raw payload for HTTP POST
+        raw_payload = {
+            "content": content,
+            "platforms": [{"platform": account.get("platform"), "accountId": account_id}],
+        }
+        if title:
+            raw_payload["title"] = title
+        if is_draft:
+            raw_payload["isDraft"] = True
+        elif publish_now:
+            raw_payload["publishNow"] = True
+        elif "scheduled_for" in params:
+            raw_payload["scheduledFor"] = params["scheduled_for"].isoformat()
+        if media_urls:
+            urls_list = [u.strip() for u in media_urls.split(",") if u.strip()]
+            raw_media = []
+            for url in urls_list:
+                mtype = "image"
+                if any(ext in url.lower() for ext in [".mp4", ".mov", ".avi", ".webm", ".m4v"]):
+                    mtype = "video"
+                elif ".gif" in url.lower():
+                    mtype = "gif"
+                raw_media.append({"type": mtype, "url": url})
+            raw_payload["mediaItems"] = raw_media
+
+        raw_response = client._post("/v1/posts", json=raw_payload)
+        if isinstance(raw_response, dict):
+            post = raw_response.get("post", raw_response)
+        else:
+            post = _safe_dump(raw_response).get("post", {})
     except Exception as e:
-        return f"❌ Failed to create post: {e}"
+        # Fallback: try SDK method anyway
+        try:
+            response = client.posts.create(**params)
+            data = _safe_dump(response)
+            post = data.get("post", {})
+        except Exception as e2:
+            return f"❌ Failed to create post: {e2}"
 
     username = account.get("username") or account.get("displayName") or account.get("name") or account_id
     media_info = f" with {len(params.get('media_items', []))} media file(s)" if params.get("media_items") else ""
@@ -526,12 +561,42 @@ def posts_cross_post(
     else:
         params["scheduled_for"] = datetime.now() + timedelta(hours=1)
 
+    # Use raw HTTP to avoid Pydantic PostCreateResponse validation bug
     try:
-        response = client.posts.create(**params)
-        data = _safe_dump(response)
-        post = data.get("post", {})
+        raw_payload = {
+            "content": content,
+            "platforms": platform_targets,
+        }
+        if is_draft:
+            raw_payload["isDraft"] = True
+        elif publish_now:
+            raw_payload["publishNow"] = True
+        elif "scheduled_for" in params:
+            raw_payload["scheduledFor"] = params["scheduled_for"].isoformat()
+        if media_urls:
+            urls_list = [u.strip() for u in media_urls.split(",") if u.strip()]
+            raw_media = []
+            for url in urls_list:
+                mtype = "image"
+                if any(ext in url.lower() for ext in [".mp4", ".mov", ".avi", ".webm", ".m4v"]):
+                    mtype = "video"
+                elif ".gif" in url.lower():
+                    mtype = "gif"
+                raw_media.append({"type": mtype, "url": url})
+            raw_payload["mediaItems"] = raw_media
+
+        raw_response = client._post("/v1/posts", json=raw_payload)
+        if isinstance(raw_response, dict):
+            post = raw_response.get("post", raw_response)
+        else:
+            post = _safe_dump(raw_response).get("post", {})
     except Exception as e:
-        return f"❌ Failed to create cross-post: {e}"
+        try:
+            response = client.posts.create(**params)
+            data = _safe_dump(response)
+            post = data.get("post", {})
+        except Exception as e2:
+            return f"❌ Failed to create cross-post: {e2}"
 
     posted_to = [t["platform"] for t in platform_targets]
     media_info = f" with {len(params.get('media_items', []))} media file(s)" if params.get("media_items") else ""

@@ -8,7 +8,7 @@ description: Secrets and authentication management. Ensures API keys, tokens, an
 > **Purpose:** Ensures API keys, tokens, and database credentials are NEVER exposed in plain text files when different AI platforms interact with this workspace.
 
 ## Core Rules
-1. **Never Hardcode Secrets:** No credentials of any kind are to be placed in `AGENT_CORE_DIRECTIVES.md`, `CLAUDE.md`, `ANTIGRAVITY.md`, or any script.
+1. **Never Hardcode Secrets:** No credentials of any kind are to be placed in entry points (`CLAUDE.md`, `ANTIGRAVITY.md`, `GEMINI.md`), or any script.
 2. **The Source of Truth:** All agents must read tokens exclusively from the `.env.agents` file located in the root directory.
 3. **MCP Configs:** When generating configuration files for new MCP servers, instruct the server initialization process to absorb the keys from the `.env.agents` or local shell environment variables rather than typing them out locally.
 

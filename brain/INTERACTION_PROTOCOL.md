@@ -128,8 +128,8 @@ Before pushing to remote, verify:
 | Tier | Files | Who Can Modify | Governance |
 |------|-------|----------------|------------|
 | **IMMUTABLE** | `brain/SOUL.md` | CC only | Agent CANNOT modify. Period. Identity is sacred. |
-| **SEMI-MUTABLE** | `AGENT_CORE_DIRECTIVES.md`, `brain/BRAIN_LOOP.md`, `brain/INTERACTION_PROTOCOL.md` | Agent proposes → CC approves | Agent writes proposal to `memory/PROPOSED_CHANGES.md`, CC reviews |
-| **GOVERNED MUTABLE** | `brain/CAPABILITIES.md`, `brain/ROUTING_MAP.md`, `memory/SOP_LIBRARY.md` | Agent freely modifies | Subject to 3-session probationary period. Changes tagged `[PROBATIONARY]` |
+| **SEMI-MUTABLE** | Entry points (`CLAUDE.md`, `ANTIGRAVITY.md`, `GEMINI.md`, `BLACKBOX.md`), `brain/BRAIN_LOOP.md`, `brain/INTERACTION_PROTOCOL.md` | Agent proposes → CC approves | Agent writes proposal to `memory/PROPOSED_CHANGES.md`, CC reviews |
+| **GOVERNED MUTABLE** | `brain/CAPABILITIES.md`, `brain/AGENTS.md`, `memory/SOP_LIBRARY.md` | Agent freely modifies | Subject to 3-session probationary period. Changes tagged `[PROBATIONARY]` |
 | **FREELY MUTABLE** | `memory/PATTERNS.md`, `memory/MISTAKES.md`, `memory/LONG_TERM.md`, `memory/SELF_REFLECTIONS.md` | Agent freely modifies | No restrictions. These are learning files. |
 | **EPHEMERAL** | `brain/STATE.md`, `memory/ACTIVE_TASKS.md`, `memory/SESSION_LOG.md` | Agent controls completely | Updated every session. No approval needed. |
 
@@ -170,6 +170,29 @@ When the agent wants to modify a semi-mutable file, write to `memory/PROPOSED_CH
 
 ---
 
+## 5.5 FILE DEPRECATION PROTOCOL
+
+When a file's responsibilities are absorbed by other files (consolidation, refactoring, architecture evolution):
+
+### The 4-Step Deprecation Checklist
+1. **DELETE** the deprecated file immediately — never leave it lingering as a "just in case"
+2. **SCAN** for all references: `grep -rn "filename" --include="*.md"` across the entire project
+3. **FIX** every stale reference found — update to point at the new canonical location
+4. **LOG** the deprecation in `brain/CHANGELOG.md` with date, old file, new location, and reason
+
+### Why This Exists
+On 2026-03-03, deleting 2 files without scanning created 15+ broken cross-references across agents/, commands/, skills/, APPS_CONTEXT/, memory/, and brain/. Any agent loading those files would have been sent to read non-existent documents, breaking their context and decision-making.
+
+### When This Applies
+- When consolidating multiple files into one
+- When an architecture change makes a file obsolete
+- When renaming a file
+- When moving a file to a different directory
+
+**This protocol is NON-NEGOTIABLE. Every file deletion MUST go through it.**
+
+---
+
 ## 6. SUPABASE PERSISTENCE STRATEGY
 
 ### Source of Truth
@@ -193,7 +216,7 @@ When the agent wants to modify a semi-mutable file, write to `memory/PROPOSED_CH
 ### What Stays Git-Only
 - `brain/SOUL.md` — Identity doesn't need DB indexing
 - `brain/BRAIN_LOOP.md` — Reasoning protocol is read sequentially
-- `AGENT_CORE_DIRECTIVES.md` — Boot instructions
+- Entry points (`CLAUDE.md`, `ANTIGRAVITY.md`, `GEMINI.md`, `BLACKBOX.md`) — Per-agent boot instructions
 - `APPS_CONTEXT/*.md` — Project-specific contexts
 - `skills/` — Skill definitions (SKILL.md files)
 
@@ -229,7 +252,7 @@ OBSERVE → REFLECT → LEARN → ADAPT → VALIDATE → COMPOUND
    - New reflection → `memory/SELF_REFLECTIONS.md`
 4. **ADAPT**: If a pattern emerges (3+ occurrences):
    - Promote to SOP candidate → `memory/SOP_LIBRARY.md`
-   - Update routing rules if needed → `brain/ROUTING_MAP.md`
+   - Update subagent registry if needed → `brain/AGENTS.md`
 5. **VALIDATE**: Tag new learnings as `[PROBATIONARY]`, track across sessions
 6. **COMPOUND**: Each session's learnings feed into the next session's context
 
@@ -289,8 +312,14 @@ Before any session ends, this MUST happen:
 - Commit with format: `bravo: sync — session YYYY-MM-DD summary`
 - Ask CC if ready to push
 
-### Step 7: Confirmation
-- State to CC: **"Memory synced. [X] files updated, [Y] traces logged, [Z] new learnings captured."**
+### Step 7: Integrity Verification
+Before committing, verify system integrity:
+- **Referential integrity**: If any files were deleted/renamed, grep for stale references
+- **Count accuracy**: If agents/skills/workflows changed, verify CAPABILITIES.md counts match reality
+- **Config sync**: If MCP configs changed, verify .vscode/mcp.json and .gemini/settings.json match
+
+### Step 8: Confirmation
+- State to CC: **"Memory synced. [X] files updated, [Y] traces logged, [Z] new learnings captured. Integrity: verified."**
 
 ---
 

@@ -1,129 +1,273 @@
 require('dotenv').config({ path: '.env.agents' });
 const TelegramBot = require('node-telegram-bot-api');
-const { exec } = require('child_process');
+const { spawn, exec } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+// ============================================================
+// BRAVO TELEGRAM BRIDGE V7.2
+//
+// Root cause of all previous failures:
+// Using shell:true with gemini.cmd causes cmd.exe to misparse
+// the prompt (parentheses, quotes, special chars break it).
+// Gemini then sees both a positional arg AND -p flag → error.
+//
+// Fix: Spawn node.exe directly with shell:false. Node's spawn
+// passes each arg as a separate argv entry via CreateProcess,
+// completely bypassing cmd.exe character parsing.
+// ============================================================
+
 const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const LOG_FILE = path.join(__dirname, 'memory', 'telegram_bridge.log');
 
 if (!TELEGRAM_TOKEN) {
-    console.error('❌ TELEGRAM_BOT_TOKEN is missing in .env.agents');
+    console.error('TELEGRAM_BOT_TOKEN missing in .env.agents');
     process.exit(1);
 }
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
-// Prevent crashing if multiple terminals run the bot simultaneously
-bot.on('polling_error', (error) => {
-    if (error.code === 'EFATAL') {
-        console.error('⚠️ Conflict Error: Another terminal is already running this bot!');
-    } else {
-        console.error('⚠️ Polling error:', error.message);
-    }
-});
-
-console.log(`[${new Date().toISOString()}] Bravo Telegram Router V5.5 starting...`);
-console.log(`[${new Date().toISOString()}] Workspace: ${process.cwd()}`);
-console.log(`[${new Date().toISOString()}] Waiting for messages from CC...`);
-
-// System context loading removed — prompt wrapper now handles context.
-// Brain files are loaded by the CLI agent via GEMINI.md / CLAUDE.md if needed.
-
-// --- AUTONOMOUS PROMPT WRAPPER (V5.5 — WAT Query-First) ---
-const getAutonomousPrompt = (userPrompt) => {
-    return `You are BRAVO V5.5, CC's AI assistant. This is a Telegram message — CC expects a SHORT, DIRECT answer.
-
-IMPORTANT RULES:
-1. ANSWER THE QUESTION using MCP tools. Keep it under 5 sentences for simple queries.
-2. Do NOT read brain files, do NOT dump state, do NOT write audit reports.
-3. Do NOT describe your thought process. Just give the answer.
-4. If an MCP tool fails, say the error in ONE sentence.
-5. If CC asks for a report or summary, read memory/ACTIVE_TASKS.md and brain/STATE.md, then summarize the key action items in a SHORT bullet list.
-
-CC's question: ${userPrompt}`;
+const log = (msg) => {
+    const line = `[${new Date().toISOString()}] ${msg}\n`;
+    console.log(line.trim());
+    try { fs.appendFileSync(LOG_FILE, line); } catch (_) {}
 };
 
-// --- CLI EXECUTION ENGINES ---
-const EXEC_TIMEOUT = 120000; // 2 minutes max per CLI execution
+log('Bravo Telegram Bridge V7.2 starting...');
 
-const executeClaude = (promptText) => {
+// ---- PATHS ----
+// Resolve actual script paths so we spawn node directly (no .cmd wrappers)
+const NODE_EXE = process.execPath; // The node.exe running this script
+const GEMINI_SCRIPT = path.join(
+    process.env.APPDATA || '',
+    'npm', 'node_modules', '@google', 'gemini-cli', 'dist', 'index.js'
+);
+const CLAUDE_EXE = path.join(
+    process.env.USERPROFILE || '', '.local', 'bin', 'claude.exe'
+);
+
+// Verify paths exist at startup
+if (!fs.existsSync(GEMINI_SCRIPT)) {
+    log(`[WARN] Gemini script not found: ${GEMINI_SCRIPT}`);
+}
+if (!fs.existsSync(CLAUDE_EXE)) {
+    log(`[WARN] Claude exe not found: ${CLAUDE_EXE}`);
+}
+
+// ---- CONFIG ----
+const EXEC_TIMEOUT = 120000; // 2 min
+
+const SYSTEM_PROMPT = `You are BRAVO, CC's autonomous AI agent. Answer directly in 1-5 sentences. No preamble. Use MCP tools when needed. CC's question:`;
+
+// Detect which MCP servers a query needs (keeps Gemini startup fast)
+const detectMcps = (text) => {
+    const t = text.toLowerCase();
+    const mcps = [];
+    if (/post|tweet|schedule|social|linkedin|instagram|threads|tiktok|bluesky|content/i.test(t)) mcps.push('late');
+    if (/database|supabase|table|sql|query|schema/i.test(t)) mcps.push('supabase');
+    if (/workflow|n8n|automat/i.test(t)) mcps.push('n8n-mcp');
+    if (/stripe|payment|invoice|subscription|balance/i.test(t)) mcps.push('stripe');
+    if (/browse|website|screenshot|url|http/i.test(t)) mcps.push('playwright');
+    if (/docs|library|documentation|api reference/i.test(t)) mcps.push('context7');
+    // Always include lightweight ones
+    mcps.push('memory', 'sequential-thinking');
+    return mcps;
+};
+
+// ---- PROCESS TRACKING ----
+const activeChildren = new Set();
+
+const killTree = (pid) => {
+    try {
+        // Windows: taskkill /T kills entire process tree
+        spawn('taskkill', ['/pid', String(pid), '/T', '/F'], {
+            windowsHide: true,
+            stdio: 'ignore',
+            shell: false
+        });
+    } catch (_) {}
+};
+
+// ---- CLI EXECUTION ----
+const executeCli = (tool, userPrompt) => {
     return new Promise((resolve) => {
-        const safePrompt = getAutonomousPrompt(promptText).replace(/"/g, '\\"');
-        const cmd = `npx @anthropic-ai/claude-code -p "${safePrompt}" --dangerously-skip-permissions --no-user-prompt`;
+        const fullPrompt = `${SYSTEM_PROMPT} ${userPrompt}`;
+        let cmd, args;
 
-        exec(cmd, { env: { ...process.env, CI: 'true', NONINTERACTIVE: 'true' }, timeout: EXEC_TIMEOUT }, (error, stdout, stderr) => {
-            if (error && error.killed) resolve("Timed out after 2 minutes. Try a simpler query or use !sys for direct commands.");
-            else resolve(stdout || stderr || "Done.");
+        if (tool === 'claude') {
+            // Claude Code: -p = --print (headless output mode)
+            cmd = CLAUDE_EXE;
+            args = [
+                '-p', fullPrompt,
+                '--dangerously-skip-permissions',
+                '--output-format', 'text',
+                '--max-turns', '3',
+                '--model', 'sonnet'
+            ];
+        } else {
+            // Gemini CLI: -p = --prompt (headless non-interactive mode)
+            // CRITICAL: Spawn node directly, NOT gemini.cmd
+            // shell:false means Node passes args via CreateProcess — no cmd.exe parsing
+            const mcps = detectMcps(userPrompt);
+            // CRITICAL: yargs only accepts ONE value per --allowed-mcp-server-names flag
+            // Must repeat the flag for each server name, NOT space-separate them
+            const mcpArgs = mcps.flatMap(m => ['--allowed-mcp-server-names', m]);
+            cmd = NODE_EXE;
+            args = [
+                '--no-warnings=DEP0040',
+                GEMINI_SCRIPT,
+                '-p', fullPrompt,
+                '--approval-mode', 'yolo',
+                '--output-format', 'text',
+                ...mcpArgs
+            ];
+            log(`[MCP] Loading: ${mcps.join(', ')}`);
+        }
+
+        log(`[EXEC] ${tool}: "${userPrompt.substring(0, 60)}..."`);
+
+        const child = spawn(cmd, args, {
+            env: {
+                ...process.env,
+                CI: 'true',
+                NONINTERACTIVE: 'true',
+                PAGER: 'cat',
+                NO_COLOR: '1',
+                FORCE_COLOR: '0'
+            },
+            stdio: ['ignore', 'pipe', 'pipe'], // CRITICAL: ignore stdin prevents interactive hang
+            shell: false, // CRITICAL: no cmd.exe — bypass all special char parsing issues
+            windowsHide: true,
+            cwd: __dirname
+        });
+
+        activeChildren.add(child);
+
+        let stdout = '';
+        let stderr = '';
+        child.stdout.on('data', (d) => { stdout += d.toString(); });
+        child.stderr.on('data', (d) => { stderr += d.toString(); });
+
+        const timer = setTimeout(() => {
+            log(`[TIMEOUT] ${tool} killed after ${EXEC_TIMEOUT / 1000}s`);
+            killTree(child.pid);
+            resolve('Timed out. Try a simpler question or use !claude prefix.');
+        }, EXEC_TIMEOUT);
+
+        child.on('close', (code) => {
+            clearTimeout(timer);
+            activeChildren.delete(child);
+            log(`[DONE] ${tool} code=${code} stdout=${stdout.length}b stderr=${stderr.length}b`);
+
+            const raw = (stdout.trim() || stderr.trim());
+            if (!raw) {
+                resolve(code === 0 ? 'Done.' : `Error (code ${code}).`);
+                return;
+            }
+            resolve(cleanOutput(raw));
+        });
+
+        child.on('error', (err) => {
+            clearTimeout(timer);
+            activeChildren.delete(child);
+            log(`[ERROR] ${tool}: ${err.message}`);
+            resolve(`Error: ${err.message}`);
         });
     });
 };
 
-const executeGemini = (promptText) => {
-    return new Promise((resolve) => {
-        const safePrompt = getAutonomousPrompt(promptText).replace(/"/g, '\\"');
-        const cmd = `gemini "${safePrompt}" --approval-mode yolo`;
+// Strip ANSI codes and CLI noise
+const cleanOutput = (raw) => {
+    let text = raw
+        .replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '')
+        .replace(/[⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏]/g, '');
 
-        exec(cmd, { env: { ...process.env }, timeout: EXEC_TIMEOUT }, (error, stdout, stderr) => {
-            if (error && error.killed) resolve("Timed out after 2 minutes. Try a simpler query or use !sys for direct commands.");
-            else resolve(stdout || stderr || "Done.");
-        });
-    });
+    const noise = [
+        /^[█▓░▀▄▐▌]+/,
+        /logged in with/i,
+        /waiting for mcp/i,
+        /^Gemini CLI/i,
+        /^Using model/i,
+        /^Loading/i,
+        /YOLO mode is enabled/i,
+        /Loaded cached credentials/i,
+        /supports tool updates/i,
+        /^Bravo online\.?\s*$/i,
+        /^Memory synced\.?\s*$/i,
+        /Listening for changes/i,
+        /^Server '/i,
+        /^\s*$/
+    ];
+
+    return text.split('\n')
+        .filter(line => !noise.some(p => p.test(line.trim())))
+        .join('\n')
+        .trim() || text.trim();
 };
 
-// --- MESSAGE ROUTING ---
+// ---- TELEGRAM HANDLER ----
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const text = msg.text;
     if (!text) return;
 
-    const lowerText = text.toLowerCase();
+    const user = msg.from.username || msg.from.first_name || '?';
+    log(`[MSG] ${user}: ${text}`);
 
-    // Chunking helper
-    const sendChunks = (outputStr, formatMsg = false) => {
-        if (!outputStr) return;
-        const chunks = outputStr.match(/[\s\S]{1,4000}/g) || ["(No Output)"];
-        chunks.forEach(chunk => {
-            bot.sendMessage(chatId, formatMsg ? `\`\`\`bash\n${chunk}\n\`\`\`` : chunk, formatMsg ? { parse_mode: 'Markdown' } : {});
-        });
-    };
+    if (text === '/start' || text === '/help') {
+        return bot.sendMessage(chatId, [
+            'Bravo Bridge V7.2',
+            'Type any question (routes to Gemini).',
+            '!claude <query> — route to Claude Code',
+            '!sys <cmd> — run shell command'
+        ].join('\n'));
+    }
 
     try {
-        // --- ROUTE 1: RAW SYSTEM COMMAND ---
+        // Shell passthrough
         if (text.startsWith('!sys ')) {
-            const cmd = text.replace('!sys ', '');
-            exec(cmd, (error, stdout, stderr) => sendChunks(stdout || stderr || "Done.", true));
+            await bot.sendMessage(chatId, 'Running...');
+            exec(text.slice(5), { windowsHide: true, timeout: 30000 }, (err, out, serr) => {
+                const r = out || serr || (err ? err.message : 'Done.');
+                bot.sendMessage(chatId, r.substring(0, 4000));
+            });
             return;
         }
 
-        // --- ROUTE 2: CLAUDE EXECUTION (!claude) ---
-        if (text.startsWith('!claude ')) {
-            const prompt = text.replace('!claude ', '');
-            bot.sendMessage(chatId, `🛠️ Senior Architect (Claude) assigned. Executing autonomously...`);
-            const result = await executeClaude(prompt);
-            sendChunks(result, false);
-            return;
-        }
+        const isClaude = text.startsWith('!claude ');
+        const prompt = text.replace(/^!(claude|gemini|bravo)\s+/, '');
 
-        // --- ROUTE 3: SYSTEM EVOLUTION (!evolve / !audit) ---
-        if (lowerText === '!evolve' || lowerText === '!audit') {
-            bot.sendMessage(chatId, `🧬 Triggering Autonomous Evolution Protocol...`);
-            const result = await executeGemini(`Execute the protocol defined in commands/monthly-audit.md.`);
-            bot.sendMessage(chatId, `✅ Evolution Sequence Complete.`);
-            sendChunks(result, false);
-            return;
-        }
+        await bot.sendChatAction(chatId, 'typing');
+        await bot.sendMessage(chatId, isClaude ? '🧠 Claude...' : '✨ Thinking...');
 
-        // --- ROUTE 4: BRAVO/GEMINI EXECUTION (DEFAULT) ---
-        // Any message that isn't a specific !claude or !sys command defaults to Bravo/Gemini
-        if (text.startsWith('!gemini ') || text.startsWith('!bravo ') || !text.startsWith('!')) {
-            const prompt = text.replace(/^!(gemini|bravo) /, '');
-            bot.sendMessage(chatId, `✨ Bravo (Gemini CLI) activated. Processing autonomously...`);
-            const result = await executeGemini(prompt);
-            sendChunks(result, false);
-            return;
-        }
+        // Keep typing indicator alive
+        const typing = setInterval(() => {
+            bot.sendChatAction(chatId, 'typing').catch(() => {});
+        }, 5000);
 
+        const result = await executeCli(isClaude ? 'claude' : 'gemini', prompt);
+        clearInterval(typing);
+
+        // Telegram limit is 4096 chars
+        const chunks = (result || 'No response.').match(/[\s\S]{1,4000}/g) || ['No response.'];
+        for (const c of chunks) {
+            await bot.sendMessage(chatId, c);
+        }
     } catch (err) {
-        bot.sendMessage(chatId, `❌ Router Error: ${err.message}`);
+        log(`[CRASH] ${err.message}`);
+        bot.sendMessage(chatId, `Error: ${err.message}`).catch(() => {});
     }
 });
+
+// ---- SHUTDOWN ----
+const shutdown = (sig) => {
+    log(`[SHUTDOWN] ${sig}`);
+    for (const c of activeChildren) killTree(c.pid);
+    bot.stopPolling();
+    process.exit(0);
+};
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+bot.on('polling_error', (e) => log(`[POLL] ${e.message}`));
+
+log('Bridge ready.');

@@ -2,7 +2,15 @@
 description: End-of-session sync — update state, tasks, and session log
 ---
 
-## Steps
+# Sync Command
+
+## What This Command Does
+Performs the mandatory end-of-session memory sync: updates STATE.md, ACTIVE_TASKS.md, SESSION_LOG.md, and captures any learnings.
+
+## When to Use
+Use `/sync` before ending any session — this is **mandatory** per session protocol.
+
+## How It Works / Steps
 
 1. Review what was accomplished this session.
 
@@ -23,6 +31,10 @@ description: End-of-session sync — update state, tasks, and session log
    - [next steps]
    ```
 
-5. If any tasks failed, add a reflexion entry to `memory/SELF_REFLECTIONS.md` (if it exists).
+5. If any mistakes were made, log to `memory/MISTAKES.md` with root cause and prevention.
 
-6. Say: "Memory synced. [X] files updated, [Y] tasks completed."
+6. If new patterns discovered, log to `memory/PATTERNS.md` (tag `[PROBATIONARY]`).
+
+7. If any tasks failed, add a reflexion entry to `memory/SELF_REFLECTIONS.md`.
+
+8. Say: "Memory synced. [X] files updated, [Y] tasks completed."

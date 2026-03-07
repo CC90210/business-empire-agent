@@ -1,3 +1,5 @@
+> **ROUTING:** GitHub: CC90210/nostalgic-requests | Supabase: jqybbrtzpvmefgzzdagz | Deploy: Vercel
+
 # Nostalgic Requests — Performer Song Request Platform
 
 ## Project Overview

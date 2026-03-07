@@ -2,6 +2,7 @@
 **Date:** Saturday, March 7, 2026  
 **Time:** 12:00 PM - 12:30 PM EST  
 **Lead:** Luke McMillan (VP/Co-owner)  
+**Email:** lmcmillan@thenorthwoodfitnessclub.com  
 **Goal:** Transition from "Discovery" to "Paid AI Audit" or "Retainer Onboarding."
 
 ---

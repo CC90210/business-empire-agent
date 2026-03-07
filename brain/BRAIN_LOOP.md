@@ -91,8 +91,10 @@ Check for growth opportunities:
 - **Activation update**: Increment access_count for any patterns/SOPs used in Supabase `skill_activation`
 - Is this a genuinely novel solution? If yes, flag as skill library candidate
 
-### Step 10: HEAL
+### Step 10: HEAL (Self-Healing + Integrity Checks)
 Run self-healing checks on affected systems:
+
+**Standard Cleanup:**
 - Did I create any temp files? Clean them.
 - Did I leave uncommitted changes? Flag them.
 - Did any MCP call fail? Log to MISTAKES.md.
@@ -100,6 +102,32 @@ Run self-healing checks on affected systems:
 - Update `brain/STATE.md` with post-task operational state.
 - **Supabase sync**: Flush any pending traces, update agent_state
 - **Git checkpoint**: If significant changes, stage + commit with `bravo: [verb] — [reason]`
+
+**Referential Integrity Scan (MANDATORY after file changes):**
+If ANY file was renamed, moved, or deleted during this session:
+1. Run `grep -rn "deleted_or_renamed_filename" --include="*.md"` across the full project
+2. Fix EVERY stale reference found
+3. Run the grep again to confirm zero hits
+4. This step is NON-NEGOTIABLE — skipping it causes 10-20+ broken cross-references (see MISTAKES.md 2026-03-03)
+
+**Capability Count Verification (MANDATORY after adding/removing agents, skills, workflows):**
+If ANY agent, skill, or workflow was added or removed:
+1. Count actual files: agents/*.md, skills/*/SKILL.md, .agents/workflows/*.md
+2. Compare against the counts in `brain/CAPABILITIES.md` and `README.md`
+3. Update any mismatches immediately
+
+**File Deprecation Protocol (MANDATORY when consolidating files):**
+When a file's responsibilities are absorbed by other files:
+1. Delete the deprecated file immediately (don't leave it lingering)
+2. Run referential integrity scan (above)
+3. Log the deprecation in `brain/CHANGELOG.md`
+4. Never let two files own the same responsibility
+
+**Dependency Health Check (after MCP or SDK issues):**
+If any external tool/SDK/CLI misbehaved:
+1. Log the behavior change in MISTAKES.md
+2. Check if the version changed: `npm list -g`, `pip show package`, etc.
+3. If version drift caused the issue, pin the version or add version check to /health
 
 ## When to Use the Full Loop
 

@@ -1,3 +1,5 @@
+> **ROUTING:** Local `C:\Users\User\realestate-App` | GitHub: CC90210/real-estate-App | Deploy: Vercel
+
 # PropFlow — Real Estate Management Platform
 
 ## Project Overview

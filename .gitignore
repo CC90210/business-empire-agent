@@ -65,7 +65,22 @@ build/
 blobs/
 
 # =============================================
+# SENSITIVE DATA (lead info, outreach history)
+# =============================================
+memory/LEAD_TRACKER.csv
+memory/outreach_archive/
+
+# =============================================
+# PLAYWRIGHT MCP ARTIFACTS
+# =============================================
+.playwright-mcp/
+
+# =============================================
 # MEDIA (large files — use Git LFS or download separately)
 # =============================================
 media/raw/
 media/exports/
+media/**/*.mp4
+media/**/*.mov
+media/**/*.wav
+media/**/*.mp3

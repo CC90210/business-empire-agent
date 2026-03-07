@@ -1,6 +1,14 @@
 # MISTAKES LOG
 > Every mistake logged with root cause and prevention. Check this BEFORE repeating a task type.
 
+### 2026-03-04 — CLI Newline Escaping & IMAP Sent Sync Failure
+**What happened:** Emails sent via `scripts/send_email.py` from the command line contained literal `\n` characters instead of line breaks, and were not visible in the Gmail "Sent" folder.
+**Root cause:** Shell arguments treat `\n` as a literal string. Additionally, SMTP-only sending does not trigger a sync to the IMAP 'Sent' folder in Gmail.
+**Prevention:** 
+1. **Newline Fix:** In Python scripts, use `body.replace('\\n', '\n')` to decode escaped newlines passed from the CLI.
+2. **IMAP Sync:** Manually append sent messages to `"[Gmail]/Sent Mail"` via `imaplib` to ensure visibility.
+3. **URL Formatting:** Always prefix domain links with `https://` to ensure they are clickable in plain-text email clients.
+
 ---
 
 ### 2026-02-27 — Pydantic `__future__` Syntax Error via Monkey Patching
@@ -47,5 +55,28 @@
 **What happened:** I executed the outreach campaign script twice (`scripts/execute_campaign.js`), resulting in 13 leads receiving two separate (though slightly different) emails with overlapping Google Meet invites.
 **Root cause:** I ran the initial version of the script to "get it done," and then, upon receiving further instructions for personalization and DJ-specific logic, I updated the script and *ran it again* without checking if the previous run had already successfully dispatched emails to the same list. I prioritized "perfection" of the content over the "safety" of the delivery frequency.
 **Prevention:** **IDEMPOTENCY CHECK**: Any script that performs external side effects (email, social post, API call) MUST implement a state-check (e.g., reading a `SENT.json` or checking a database flag) before execution. Furthermore, as an agent, I must always verify whether a previous execution was successful before attempting a "better" version of the same action.
+
+### 2026-03-03 — 15+ Stale Cross-References After File Consolidation
+**What happened:** Deleted `AGENT_CORE_DIRECTIVES.md` and `brain/ROUTING_MAP.md` as redundancies. However, 15+ files across agents/, commands/, skills/, APPS_CONTEXT/, memory/, and brain/ still referenced the deleted files. Any agent loading those documents would have been directed to read non-existent files.
+**Root cause:** **NO REFERENTIAL INTEGRITY CHECK.** When files are renamed or deleted, there is no protocol to scan the entire project for references to those files. Changes are made to the target but the web of cross-references is left broken.
+**Prevention:** After ANY file rename/delete/move, run `grep -rn "deleted_filename" --include="*.md"` across the full project. Added to `/commit` workflow as mandatory pre-commit step. Added to BRAIN_LOOP Step 10 (HEAL).
+
+### 2026-03-03 — Stale Counts in CAPABILITIES.md (12→14 agents, 40→41 skills)
+**What happened:** CAPABILITIES.md listed "Sub-Agents (12)" when 14 existed in agents/ folder. Skills listed as 40 when 41 existed. Workflows listed as 10 when 11 existed.
+**Root cause:** **NO AUTOMATED COUNT VERIFICATION.** Hardcoded numbers are scattered across documentation files. When a new agent/skill/workflow is added, nobody updates the counts in CAPABILITIES.md, README.md, or entry points.
+**Prevention:** During `/commit` or `/sync`, verify actual file counts against documented counts. Count formula: `ls agents/*.md | wc -l` vs what CAPABILITIES.md says.
+
+### 2026-03-03 — Redundant Files Never Formally Deprecated
+**What happened:** `AGENT_CORE_DIRECTIVES.md` existed alongside 4 entry points that contained the same information. Over time, edits went to the entry points but the "core directives" file became stale without anyone noticing.
+**Root cause:** **NO DEPRECATION LIFECYCLE.** When a file's responsibilities are absorbed by other files, the old file is never formally marked deprecated. It lingers, confusing agents about which is the source of truth.
+**Prevention:** When merging/consolidating files, immediately: 1) Delete the old file, 2) Grep for ALL references to it, 3) Update every reference, 4) Log the deprecation in CHANGELOG.md. Added as "File Deprecation Protocol" in INTERACTION_PROTOCOL.md.
+
+### 2026-03-04 — CLI Newline Escaping & IMAP Sent Sync Failure
+**What happened:** Emails sent via `scripts/send_email.py` from the command line contained literal `\n` characters instead of line breaks, and were not visible in the Gmail "Sent" folder.
+**Root cause:** Shell arguments treat `\n` as a literal string. Additionally, SMTP-only sending does not trigger a sync to the IMAP 'Sent' folder in Gmail.
+**Prevention:** 
+1. **Newline Fix:** In Python scripts, use `body.replace('\\n', '\n')` to decode escaped newlines passed from the CLI.
+2. **IMAP Sync:** Manually append sent messages to `"[Gmail]/Sent Mail"` via `imaplib` to ensure visibility.
+3. **URL Formatting:** Always prefix domain links with `https://` to ensure they are clickable in plain-text email clients.
 
 ---

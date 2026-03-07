@@ -118,7 +118,9 @@ def send_outreach(
     business_type,
     meeting_datetime,
     meeting_duration_min=30,
-    dry_run=False
+    dry_run=False,
+    custom_subject=None,
+    custom_body=None
 ):
     """
     Full outreach pipeline:
@@ -135,15 +137,18 @@ def send_outreach(
         raise ValueError("GMAIL_APP_PASSWORD not set. Load from .env.agents.")
 
     meet_link = generate_meet_link()
-    email_body = build_email_body(
-        lead_name, business_name, business_type, meet_link, meeting_datetime
-    )
+    if custom_body:
+        email_body = custom_body
+    else:
+        email_body = build_email_body(
+            lead_name, business_name, business_type, meet_link, meeting_datetime
+        )
     ics_content = generate_ics(
         lead_name, lead_email, meeting_datetime, meeting_duration_min,
         meet_link, gmail_user
     )
 
-    subject = f"{business_name} — Save 10+ Hours/Week with AI Automation"
+    subject = custom_subject if custom_subject else f"{business_name} — Save 10+ Hours/Week with AI Automation"
 
     msg = MIMEMultipart("mixed")
     msg["Subject"] = subject

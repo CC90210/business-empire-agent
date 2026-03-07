@@ -1,6 +1,6 @@
 # BRAVO — Proposed Changes Queue
 
-> Changes to semi-mutable files (AGENT_CORE_DIRECTIVES.md, BRAIN_LOOP.md, INTERACTION_PROTOCOL.md) require CC's approval.
+> Changes to semi-mutable files (entry points, BRAIN_LOOP.md, INTERACTION_PROTOCOL.md) require CC's approval.
 > Agent writes proposals here. CC reviews and approves/rejects.
 
 ## Format

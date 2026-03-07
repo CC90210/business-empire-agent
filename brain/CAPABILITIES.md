@@ -12,14 +12,16 @@
 | **Memory** | Persistent knowledge graph across sessions | create_entities, search_nodes, open_nodes |
 | **n8n** | Workflow automation management (community n8n-mcp via REST API) | search_workflows, execute_workflow, get_workflow_details |
 | **Late** | Social media posting (8+ platforms) | posts_create, posts_list, accounts_list, posts_cross_post |
-| **Supabase** | Database queries, migrations, schema (npx, project-level .claude/mcp.json) | execute_sql, apply_migration, list_tables, list_projects |
 | **Sequential Thinking** | Structured multi-step reasoning | sequentialthinking |
+
+**OFFLINE MCP (use SDK tools instead):**
+| **Supabase** | Database queries, migrations, schema | `python scripts/supabase_tool.py` — full CRUD |
 
 ### Anti-Gravity IDE (Native Local Agent — Multi-Model)
 
 Models: Gemini 3.1 Pro High/Low, Gemini 3 Flash, Claude Sonnet/Opus 4.6, GPT-OSS 120B Medium
 Entry Point: `ANTIGRAVITY.md` | Config: `.vscode/mcp.json`
-Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, content, commit, n8n, sync, research, debug)
+Workflows: `.agents/workflows/` (11 workflows: post, status, health, prime, content, commit, n8n, sync, research, debug, client-onboard)
 
 **IMPORTANT — Windows env var pattern:** n8n and Late use `cmd /c wrapper.cmd` scripts (in `scripts/`) that `set` env vars before launching. Direct `env` blocks in JSON configs do NOT work on Windows. See `scripts/n8n-mcp-wrapper.cmd` and `scripts/late-mcp-wrapper.cmd`.
 
@@ -32,9 +34,13 @@ Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, cont
 | **Memory** | Persistent knowledge graph | npx @modelcontextprotocol/server-memory |
 | **Sequential Thinking** | Multi-step reasoning | npx @modelcontextprotocol/server-sequential-thinking |
 
-**OFFLINE (reconfigure with CC):**
-| **Supabase** | Database operations | REMOVED — MCP store download errors |
-| **Stripe** | Payment management | REMOVED — MCP store download errors |
+**SDK INTEGRATIONS (Universal — replaces broken MCPs):**
+| **Supabase** | Database CRUD, queries, RPC | `python scripts/supabase_tool.py select <table> --project bravo --limit 10` |
+| **Stripe** | Balance, customers, products, invoices, subscriptions, payment links | `python scripts/stripe_tool.py balance` |
+
+**Supabase tool commands:** `list-projects`, `list-tables`, `select`, `insert`, `update`, `delete`, `upsert`, `rpc`, `query`
+**Stripe tool commands:** `balance`, `customers`, `products`, `prices`, `invoices`, `subscriptions`, `charges`, `payment-links`, `create-payment-link`, `create-customer`, `create-invoice`, `refund`, `events`
+**Projects (Supabase):** `--project bravo` (default), `--project oasis`, `--project nostalgic`
 
 ### Blackbox AI (Rapid Execution)
 - No MCPs — CLI + file access only
@@ -46,7 +52,7 @@ Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, cont
 - Purpose: Fast diagnostics, file system cleanup, automated audits, heartbeat monitoring, fallback execution
 - Interface: `gemini` command (global npm)
 - MCP Access (via `.gemini/settings.json`): n8n, Late, Playwright, Context7, Memory, Sequential Thinking (6 active servers)
-- Offline: Supabase, Stripe (removed — will reconfigure with CC)
+- SDK Tools: `python scripts/supabase_tool.py`, `python scripts/stripe_tool.py` (replaces broken MCP servers)
 - Note: Config synced with `.vscode/mcp.json`. n8n and Late use `cmd /c wrapper.cmd` pattern for env vars.
 
 ## Supabase Projects
@@ -59,7 +65,24 @@ Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, cont
 
 **Organizations:** CC (oktipozhyojufxsytrse), oasis-ai-platform (sajanpiqysuwviucycjh)
 
-## Sub-Agents (12)
+## App Registry (8 External Repos)
+
+Full routing table with local paths, GitHub URLs, tech stacks: `brain/APP_REGISTRY.md`
+
+| App | Local Path | Stack |
+|-----|-----------|-------|
+| OASIS AI Platform | `APPS/oasis-ai-platform` | React 18, Supabase |
+| PropFlow | `realestate-App` | Next.js 14, Supabase |
+| Nostalgic Requests | (GitHub only) | Next.js, Supabase |
+| Grape Vine Cottage | `APPS/Grape-Vine-Cottage` | Vite, React 18 |
+| Mindset Companion | `APPS/MINDSET COMPANION APP/cc-mindset` | Next.js 16 |
+| On The Hill | `APPS/ON-THE-HILL-WEBSITE` | Vite, React 19 |
+| PING App | `APPS/PING-APP` | Next.js, Prisma |
+| Echoes | `APPS/Echoes_APP/ECHOES_APP` | Next.js, Prisma |
+
+## Sub-Agents (14)
+
+See `brain/AGENTS.md` for the complete registry with orchestration decision matrix.
 
 | Agent | Model | Specialty |
 |-------|-------|-----------|
@@ -75,34 +98,28 @@ Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, cont
 | video-editor | Sonnet | FFmpeg, Remotion, captions |
 | workflow-builder | Sonnet | n8n automation creation |
 | writer | Sonnet | Code writing, feature implementation |
+| chief-of-staff | Sonnet | Communication, mission control, outreach |
+| revenue-hunter | Sonnet | Sales strategy, lead nurturing |
 
-## Commands (21)
+## Workflows (11 active — `.agents/workflows/`)
 
-| Command | Trigger |
+| Command | Purpose |
 |---------|---------|
-| /plan-feature | **Deep codebase analysis → implementation plan** (parallel sub-agents, validation commands, confidence scoring) |
-| /execute | **Execute plan step-by-step** with verification gates |
-| /prime | **Load full project context** — brain, memory, git, MCP health |
-| /commit | **Smart commit** — conventional format (`bravo: type — desc`), staged analysis |
-| /create-prd | **Generate PRD** for client projects (15-section structure) |
-| /add-feature | Plan & build new feature |
-| /build-workflow | n8n automation creation |
-| /cleanup | Remove junk files |
 | /client-onboard | New OASIS client setup |
-| /condense | Archive old memory logs |
+| /commit | Smart commit — conventional format, staged analysis |
 | /content | Create platform content |
 | /debug | Systematic bug fixing |
-| /deploy | Build, test, push, PR |
-| /edit-video | Video editing pipeline |
 | /health | Full workspace diagnostic |
-| /monthly-audit | Monthly evolution protocol |
+| /n8n | Search, inspect, manage n8n workflows |
 | /post | Publish via Late API |
+| /prime | Load full project context |
 | /research | Competitive intelligence |
-| /review | Code quality audit |
-| /self-heal | Session-end diagnostics |
 | /status | Project status report |
+| /sync | End-of-session sync |
 
-## Skills (40)
+## Skills (41)
+
+> **Note:** All skills use the Claude Agent Skills 2.0 structure. They are stored in `skills/[skill-name]/SKILL.md` format. The descriptions inside the frontmatter define their activation triggers.
 
 | Category | Skills |
 |----------|--------|
@@ -129,7 +146,7 @@ Workflows: `.agents/workflows/` (10 workflows: post, status, health, prime, cont
 | GoHighLevel | n8n webhooks | CRM for OASIS clients |
 | Twilio | API/n8n | SMS & voice (Nostalgic Requests) |
 | Shopify | Admin UI | FromOasis e-commerce |
-| Telegram | telegram_agent.js (V5.5) | CLI bridge for remote execution — routes to Gemini/Claude via query-first pattern. Start: `npm run telegram` |
+| Telegram | telegram_agent.js (V6.0) | CLI bridge for remote execution — routes to Gemini/Claude. Prefers global gemini install. Start: `npm run telegram` |
 
 ## Video Production Pipeline
 
@@ -153,4 +170,4 @@ Agent: `agents/video-editor.md` | Command: `/edit-video`
 - **Hosting:** Vercel (auto-deploy from git)
 - **Payments:** Stripe (3 brand accounts)
 - **Automation:** n8n (Hostinger VPS: https://n8n.srv993801.hstgr.cloud)
-- **AI Models:** Claude Opus/Sonnet, Gemini 1.5 Pro/Flash, GPT-4o, Gemini CLI (v0.31.0)
+- **AI Models:** Claude Opus/Sonnet, Gemini 1.5 Pro/Flash, GPT-4o, Gemini CLI (v0.32.1)

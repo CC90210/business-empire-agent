@@ -30,28 +30,43 @@ When CC asks a question, answer it using MCP tools. Do NOT dump file contents or
 |---|---|---|
 | n8n workflows, automations | n8n-mcp | `search_workflows`, `execute_workflow` |
 | Social posts, scheduling | Late | `posts_create`, `posts_list`, `posts_cross_post` |
-| Database, SQL, tables | Supabase | `execute_sql`, `list_tables`, `apply_migration` |
 | Web browsing, screenshots | Playwright | `browser_navigate`, `browser_snapshot` |
 | Library documentation | Context7 | `resolve-library-id`, `query-docs` |
 | Knowledge graph | Memory | `search_nodes`, `create_entities` |
 | Structured reasoning | Sequential Thinking | `sequentialthinking` |
 
+**SDK TOOLS (replaces broken MCPs — full capability via terminal):**
+- **Supabase** — `python scripts/supabase_tool.py select <table> --project bravo --limit 10`
+- **Stripe** — `python scripts/stripe_tool.py balance` | `customers` | `invoices` | `products` | `subscriptions`
+
 If an MCP tool fails: report the error in one sentence. Do NOT fall back to curl or create workaround scripts.
 
-### RULE 3: Credentials and security
+### RULE 3: CREDENTIALS AND SECURITY PROTOCOL (CRITICAL)
 
-All credentials live in `.env.agents`. NEVER hardcode secrets. See @skills/security-protocol/SKILL.md
+All credentials live in `.env.agents`. NEVER hardcode secrets. See @skills/security-protocol/SKILL.md.
+- **Secrets:** NEVER hardcode API keys or database passwords. If an exposed secret is detected, STOP and initiate rotation.
+- **Validations:** Validate all inputs at system boundaries. Cast and sanitize external API payloads.
+- **Authorizations:** Enforce RLS on Supabase. Sandbox risky scripts in `tmp/`.
 
 ### RULE 4: Cross-file sync
 
 IMPORTANT: When changing ANY config, entry point, or structure file — update ALL files that reference it:
 - MCP configs: `.claude/mcp.json`, `.vscode/mcp.json`, `~/.gemini/settings.json`, `.env.agents`
 - Entry points: `CLAUDE.md`, `GEMINI.md`, `ANTIGRAVITY.md`, `telegram_agent.js`
-- Docs: `brain/CAPABILITIES.md`, `brain/ROUTING_MAP.md`, `skills/mcp-operations/SKILL.md`
+- Docs: `brain/CAPABILITIES.md`, `brain/AGENTS.md`, `skills/mcp-operations/SKILL.md`
 
 ### RULE 5: Verification
 
 Always verify your work — run tests, check Supabase, use `git status`. If you can't verify it, don't ship it.
+
+### RULE 6: App Registry Routing
+
+When CC mentions modifying code in any app (OASIS, PropFlow, Nostalgic, Grape Vine, Mindset, On The Hill, PING, Echoes):
+1. Load @brain/APP_REGISTRY.md to get the LOCAL PATH
+2. `cd` to that path — make ALL code changes THERE
+3. Commit and push from that repo — NOT from Business-Empire-Agent
+4. Log a 1-2 sentence summary in memory/SESSION_LOG.md
+Business-Empire-Agent is ONLY for agent intelligence (brain/, memory/, skills/, scripts/).
 
 ## Workflow Commands
 
@@ -63,10 +78,18 @@ Always verify your work — run tests, check Supabase, use `git status`. If you 
 | `/commit` | Smart commit with conventional format (`bravo: type — desc`) |
 | `/create-prd` | Generate PRD for client projects |
 
+## Sub-Agent Orchestration
+
+See @brain/AGENTS.md for the complete subagent registry (14 agents with decision matrix).
+Delegation: Complex features → planner. Architecture → architect. Code review → reviewer. Bugs → debugger. Research → researcher.
+
 ## Skills (loaded on-demand)
+
+Note: All skills are stored in the Agent Skills 2.0 structure format: `skills/[skill-name]/SKILL.md`.
 
 - Debugging: @skills/systematic-debugging/SKILL.md
 - Self-healing: @skills/self-healing/SKILL.md
+- TDD / Coding: @skills/test-driven-development/SKILL.md
 - Browser automation: @skills/browser-automation/SKILL.md
 - E2E testing: @skills/e2e-testing/SKILL.md
 - Planning: @skills/writing-plans/SKILL.md → @skills/executing-plans/SKILL.md
@@ -89,8 +112,9 @@ Always verify your work — run tests, check Supabase, use `git status`. If you 
 
 If unsure whether session is ending, ask CC.
 
-## What You DON'T Have
+## What You DON'T Have (as MCP — use SDK tools instead)
 
 - **GitHub MCP** — use `git` CLI locally, Playwright for github.com
-- **Stripe MCP** — only in Anti-Gravity IDE
+- **Supabase MCP** — use `python scripts/supabase_tool.py` (full CRUD, 3 projects)
+- **Stripe MCP** — use `python scripts/stripe_tool.py` (balance, customers, invoices, subscriptions, payment links)
 - **Chrome** — use Playwright for all web research

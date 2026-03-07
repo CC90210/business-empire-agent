@@ -7,7 +7,7 @@
 | Fact | Confidence | Source | Last Verified |
 |------|-----------|--------|---------------|
 | Bravo uses 3-tier agent architecture: Claude Code (Opus), Anti-Gravity (Gemini), Blackbox | 0.95 | Implemented 2026-02-27 | 2026-02-28 |
-| All agents share AGENT_CORE_DIRECTIVES.md, memory/, .env.agents | 0.95 | Confirmed across 3 sessions | 2026-02-28 |
+| All agents share entry points, brain/, memory/, .env.agents | 0.95 | Confirmed across 3 sessions | 2026-02-28 |
 | Late MCP profileId returns dict not str — requires Pydantic patch in uv cache | 0.85 | Debugged and patched 2026-02-27 | 2026-02-27 |
 | Supabase MCP for Claude Code: use npx @supabase/mcp-server-supabase in .claude/mcp.json (not HTTP plugin) | 0.95 | Fixed 2026-02-28, matches Anti-Gravity pattern | 2026-02-28 |
 | Supabase projects: Bravo (agent DB), nostalgic-requests, oasis-ai-platform — all us-west-2 | 0.95 | Confirmed via Anti-Gravity MCP | 2026-02-28 |
@@ -23,6 +23,7 @@
 | CC's partner Adon handles content + client relations | 0.90 | CC stated | 2026-02-26 |
 | PropFlow is pre-revenue, in active development | 0.85 | CC stated | 2026-02-26 |
 | CC works weekends at Nicky's Donuts | 0.90 | CC stated | 2026-02-26 |
+| **Content Strategy:** Wednesday is "Content Day". CC uploads batch video/files, Agent schedules 1 piece/day across all channels via Late. | 0.95 | CC stated | 2026-03-05 |
 
 ## Technical Facts
 
